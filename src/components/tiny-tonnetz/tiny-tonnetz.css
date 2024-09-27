@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+svg {
+  display: block;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+.-highlight {
+  fill: yellow;
+}

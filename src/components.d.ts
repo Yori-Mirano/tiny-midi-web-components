@@ -6,56 +6,36 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first": string;
-        /**
-          * The last name
-         */
-        "last": string;
-        /**
-          * The middle name
-         */
-        "middle": string;
+    interface TinyTonnetz {
+        "marginUnitCellCount": number;
+        "scale": number;
     }
 }
 declare global {
-    interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {
+    interface HTMLTinyTonnetzElement extends Components.TinyTonnetz, HTMLStencilElement {
     }
-    var HTMLMyComponentElement: {
-        prototype: HTMLMyComponentElement;
-        new (): HTMLMyComponentElement;
+    var HTMLTinyTonnetzElement: {
+        prototype: HTMLTinyTonnetzElement;
+        new (): HTMLTinyTonnetzElement;
     };
     interface HTMLElementTagNameMap {
-        "my-component": HTMLMyComponentElement;
+        "tiny-tonnetz": HTMLTinyTonnetzElement;
     }
 }
 declare namespace LocalJSX {
-    interface MyComponent {
-        /**
-          * The first name
-         */
-        "first"?: string;
-        /**
-          * The last name
-         */
-        "last"?: string;
-        /**
-          * The middle name
-         */
-        "middle"?: string;
+    interface TinyTonnetz {
+        "marginUnitCellCount"?: number;
+        "scale"?: number;
     }
     interface IntrinsicElements {
-        "my-component": MyComponent;
+        "tiny-tonnetz": TinyTonnetz;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "my-component": LocalJSX.MyComponent & JSXBase.HTMLAttributes<HTMLMyComponentElement>;
+            "tiny-tonnetz": LocalJSX.TinyTonnetz & JSXBase.HTMLAttributes<HTMLTinyTonnetzElement>;
         }
     }
 }
