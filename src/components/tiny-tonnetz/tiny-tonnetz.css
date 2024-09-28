@@ -1,13 +1,27 @@
 :host {
   display: block;
-}
-
-svg {
-  display: block;
-  min-width: 200px;
-  min-height: 200px;
+  background: black;
+  overflow: hidden;
 }
 
 .-highlight {
   fill: yellow;
+}
+
+.tinyTonnetz_anchor {
+  position: relative;
+  overflow: visible;
+  width: 0;
+  height: 0;
+  top: 50%;
+  left: 50%;
+}
+
+.tinyTonnetz_zoomSlider {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 1;
+  writing-mode: vertical-lr;
+  direction: rtl;
 }

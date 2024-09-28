@@ -1,0 +1,35 @@
+.cell_node {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border-radius: .5rem;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  font-size: .8rem;
+  font-family: sans-serif;
+
+  width: 32px;
+  height: 32px;
+
+  &:hover {
+    background: yellow;
+  }
+
+  &:not(.-primary) {
+    opacity: .4;
+  }
+}
+
+.cell_background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #fff2;
+  width: 99px;
+  height: 74px;
+  transform: translateY(-100%);
+}

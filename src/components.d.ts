@@ -10,6 +10,10 @@ export namespace Components {
         "marginUnitCellCount": number;
         "scale": number;
     }
+    interface TinyTonnetzCell {
+        "primary": boolean;
+        "semiToneCode": number;
+    }
 }
 declare global {
     interface HTMLTinyTonnetzElement extends Components.TinyTonnetz, HTMLStencilElement {
@@ -18,8 +22,15 @@ declare global {
         prototype: HTMLTinyTonnetzElement;
         new (): HTMLTinyTonnetzElement;
     };
+    interface HTMLTinyTonnetzCellElement extends Components.TinyTonnetzCell, HTMLStencilElement {
+    }
+    var HTMLTinyTonnetzCellElement: {
+        prototype: HTMLTinyTonnetzCellElement;
+        new (): HTMLTinyTonnetzCellElement;
+    };
     interface HTMLElementTagNameMap {
         "tiny-tonnetz": HTMLTinyTonnetzElement;
+        "tiny-tonnetz-cell": HTMLTinyTonnetzCellElement;
     }
 }
 declare namespace LocalJSX {
@@ -27,8 +38,13 @@ declare namespace LocalJSX {
         "marginUnitCellCount"?: number;
         "scale"?: number;
     }
+    interface TinyTonnetzCell {
+        "primary"?: boolean;
+        "semiToneCode"?: number;
+    }
     interface IntrinsicElements {
         "tiny-tonnetz": TinyTonnetz;
+        "tiny-tonnetz-cell": TinyTonnetzCell;
     }
 }
 export { LocalJSX as JSX };
@@ -36,6 +52,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "tiny-tonnetz": LocalJSX.TinyTonnetz & JSXBase.HTMLAttributes<HTMLTinyTonnetzElement>;
+            "tiny-tonnetz-cell": LocalJSX.TinyTonnetzCell & JSXBase.HTMLAttributes<HTMLTinyTonnetzCellElement>;
         }
     }
 }
