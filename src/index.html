@@ -9,6 +9,21 @@
     <script nomodule src="/build/tiny-midi-web-components.js"></script>
   </head>
   <body>
-    <tiny-tonnetz scale="1" style="position: absolute; inset: 0;"/>
+    <tiny-tonnetz scale="1" style="position: absolute; inset: 0; aspect-ratio: auto"/>
+
+    <script>
+      const tonnetzViz = document.querySelector('tiny-tonnetz');
+
+      if (tonnetzViz) {
+        tonnetzViz.activatedNotes = {
+          0: [{sustained: false}],
+          2: [{sustained: false}],
+          3: [{sustained: false}],
+          5: [{sustained: false}, {sustained: true}],
+          7: [{sustained: false}],
+          8: [{sustained: false}],
+        };
+      }
+    </script>
   </body>
 </html>

@@ -5,12 +5,18 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { ActivatedNotes } from "./components/tiny-tonnetz/tiny-tonnetz";
+import { ActivatedNotes as ActivatedNotes1 } from "./components/tiny-tonnetz/tiny-tonnetz";
+export { ActivatedNotes } from "./components/tiny-tonnetz/tiny-tonnetz";
+export { ActivatedNotes as ActivatedNotes1 } from "./components/tiny-tonnetz/tiny-tonnetz";
 export namespace Components {
     interface TinyTonnetz {
+        "activatedNotes"?: ActivatedNotes;
         "marginUnitCellCount": number;
         "scale": number;
     }
     interface TinyTonnetzCell {
+        "activatedNotes"?: ActivatedNotes1;
         "height": number;
         "primary": boolean;
         "semiToneCode": number;
@@ -37,10 +43,12 @@ declare global {
 }
 declare namespace LocalJSX {
     interface TinyTonnetz {
+        "activatedNotes"?: ActivatedNotes;
         "marginUnitCellCount"?: number;
         "scale"?: number;
     }
     interface TinyTonnetzCell {
+        "activatedNotes"?: ActivatedNotes1;
         "height"?: number;
         "primary"?: boolean;
         "semiToneCode"?: number;

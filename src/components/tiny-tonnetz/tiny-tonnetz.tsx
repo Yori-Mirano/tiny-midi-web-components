@@ -1,8 +1,17 @@
 import { Component, Host, h, Element, State, Prop } from '@stencil/core';
 
-enum NoteIntervals {
+export enum NoteIntervals {
   MINOR_THIRD = 3,
   MAJOR_THIRD = 4,
+  PERFECT_FIFTH = 7,
+}
+
+export type SemiToneCode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
+export type ActivatedNotes = Record<SemiToneCode, Array<Note>>;
+
+export interface Note {
+  sustained?: boolean;
 }
 
 @Component({
@@ -14,6 +23,7 @@ export class TinyTonnetz {
 
   @Element() el: HTMLElement;
 
+  @Prop() activatedNotes?: ActivatedNotes;
   @Prop({ mutable: true }) scale = 1;
   @Prop() marginUnitCellCount = 1;
 
@@ -101,6 +111,8 @@ export class TinyTonnetz {
 
     for (let row = -halfNumRows; row < halfNumRows +(isEvenNumRows?0:1); row++) {
       for (let col = -halfNumCols; col < halfNumCols +(isEvenNumCols?0:1); col++) {
+        const semiToneCode = this.getSemiToneCodeFromCoordinates(col, row);
+
         let x = col * horizontalUnit;
         let y = row * -verticalUnit;
 
@@ -112,11 +124,13 @@ export class TinyTonnetz {
           y -= verticalUnit / 2;
         }
 
+
         content.push(
           this.generateCell(
+            this.activatedNotes,
             x, y,
             horizontalUnit, verticalUnit,
-            this.getSemiToneCodeFromCoordinates(col, row),
+            semiToneCode,
             this.isCentralCluster(col, row)
           )
         );
@@ -145,9 +159,10 @@ export class TinyTonnetz {
     );
   }
 
-  generateCell(x: number, y: number, width: number, height: number, semiToneCode: number, primary: boolean) {
+  generateCell(activatedNotes:ActivatedNotes, x: number, y: number, width: number, height: number, semiToneCode: number, primary: boolean) {
     return (
       <tiny-tonnetz-cell
+        activatedNotes={activatedNotes}
         width={width}
         height={height}
         semiToneCode={semiToneCode}

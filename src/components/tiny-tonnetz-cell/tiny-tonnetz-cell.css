@@ -1,4 +1,5 @@
 .cell {
+  --bold-color: hsl(346.15deg 54.55% 65.49%);
   pointer-events: none;
 
   &:not(.-primary) {
@@ -12,13 +13,14 @@
   top: 0;
   left: 0;
   display: flex;
+  gap: 4px;
   justify-content: center;
   align-items: center;
   text-align: center;
-  background: white;
+  background: #f3f3f3;
+  color: #888;
   border-radius: .5rem;
   transform: translate(-50%, -50%);
-  cursor: pointer;
   font-size: .8rem;
   font-family: sans-serif;
   font-weight: bold;
@@ -33,15 +35,22 @@
     font-size: .6rem;
   }
 
-  &:hover {
-    box-shadow: 0 0 8px #956c3a22, 0 8px 16px #956c3a44;
-    background: #ffdcac;
-    color: #956c3a;
+  .cell.-active & {
+    /*box-shadow:
+      0 0 8px hsla(346.15deg 54.55% 65.49% / 20%),
+      0 8px 16px hsla(346.15deg 54.55% 65.49% / 40%);
+    */
+    box-shadow:
+      0 0 8px #0002,
+      0 8px 16px #0004;
+    background: #ffffff;
+    color: #000;
+    border: 2px solid #000;
+  }
 
-    .cell.-blackKey & {
-      background: #956c3a;
-      color: #ffdcac;
-    }
+  .cell.-active.-blackKey & {
+    background: #000;
+    color: #fff;
   }
 }
 
@@ -51,7 +60,34 @@
   pointer-events: none;
 
   line {
-    stroke-width: 15px;
+    stroke-width: 8px;
     stroke: #e3e3e3;
+
+    &.-active {
+      stroke-width: 14px;
+      /*stroke: hsl(346.15deg 54.55% 65.49%);*/
+      stroke: #333;
+
+      &.perfectFifth:not(.-alone) {
+        stroke-width: 1px;
+        stroke-dasharray: 16, 6;
+      }
+    }
+  }
+}
+
+.cell_minorChord {
+  fill: none;
+  &.-active {
+    /*fill : hsl(298.47deg 43.43% 52.68% / 20%);*/
+    fill: url(#minor-grad);
+  }
+}
+
+.cell_majorChord {
+  fill: none;
+  &.-active {
+    fill: url(#major-grad);
+    /*fill: hsl(7.7deg 100% 70.64% / 20%);*/
   }
 }
