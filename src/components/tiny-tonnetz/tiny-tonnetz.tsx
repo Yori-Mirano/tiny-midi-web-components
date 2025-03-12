@@ -15,7 +15,7 @@ export class TinyTonnetz {
   @Element() el: HTMLElement;
 
   @Prop({ mutable: true }) scale = 1;
-  @Prop({ mutable: true }) marginUnitCellCount = 2
+  @Prop() marginUnitCellCount = 1;
 
   @State() dimensions: { width: number, height: number } = { width: 0, height: 0 };
 
@@ -58,7 +58,7 @@ export class TinyTonnetz {
   generateGrid() {
     const majorMinorThirdRatio = NoteIntervals.MAJOR_THIRD / NoteIntervals.MINOR_THIRD;
 
-    const majorThirdLength = 100;
+    const majorThirdLength = 120;
     const minorThirdLength = majorThirdLength / majorMinorThirdRatio;
 
     let numRows = this.minVerticalCount;
@@ -112,7 +112,14 @@ export class TinyTonnetz {
           y -= verticalUnit / 2;
         }
 
-        content.push(this.generateCell(x, y, this.getSemiToneCodeFromCoordinates(col, row), this.isCentralCluster(col, row)));
+        content.push(
+          this.generateCell(
+            x, y,
+            horizontalUnit, verticalUnit,
+            this.getSemiToneCodeFromCoordinates(col, row),
+            this.isCentralCluster(col, row)
+          )
+        );
       }
     }
 
@@ -138,8 +145,16 @@ export class TinyTonnetz {
     );
   }
 
-  generateCell(x: number, y: number, semiToneCode: number, primary: boolean) {
-    return <tiny-tonnetz-cell semiToneCode={semiToneCode} primary={primary} style={{translate:`${x}px ${y}px`, position: 'absolute'}}/>;
+  generateCell(x: number, y: number, width: number, height: number, semiToneCode: number, primary: boolean) {
+    return (
+      <tiny-tonnetz-cell
+        width={width}
+        height={height}
+        semiToneCode={semiToneCode}
+        primary={primary}
+        style={{translate:`${x}px ${y}px`, position: 'absolute'}}
+      />
+    );
   }
 
 

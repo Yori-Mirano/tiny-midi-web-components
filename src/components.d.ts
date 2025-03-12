@@ -11,8 +11,10 @@ export namespace Components {
         "scale": number;
     }
     interface TinyTonnetzCell {
+        "height": number;
         "primary": boolean;
         "semiToneCode": number;
+        "width": number;
     }
 }
 declare global {
@@ -39,8 +41,10 @@ declare namespace LocalJSX {
         "scale"?: number;
     }
     interface TinyTonnetzCell {
+        "height"?: number;
         "primary"?: boolean;
         "semiToneCode"?: number;
+        "width"?: number;
     }
     interface IntrinsicElements {
         "tiny-tonnetz": TinyTonnetz;

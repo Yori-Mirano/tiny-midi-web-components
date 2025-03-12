@@ -1,35 +1,57 @@
+.cell {
+  pointer-events: none;
+
+  &:not(.-primary) {
+    /*filter : contrast(.1) brightness(1.7);*/
+  }
+}
+
 .cell_node {
+  pointer-events: initial;
   position: absolute;
   top: 0;
   left: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
   background: white;
   border-radius: .5rem;
   transform: translate(-50%, -50%);
   cursor: pointer;
   font-size: .8rem;
   font-family: sans-serif;
+  font-weight: bold;
+  transition: box-shadow 100ms;
 
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
 
-  &:hover {
-    background: yellow;
+  .cell.-blackKey & {
+    background: #a1a1a1;
+    color: #eee;
+    font-size: .6rem;
   }
 
-  &:not(.-primary) {
-    opacity: .4;
+  &:hover {
+    box-shadow: 0 0 8px #956c3a22, 0 8px 16px #956c3a44;
+    background: #ffdcac;
+    color: #956c3a;
+
+    .cell.-blackKey & {
+      background: #956c3a;
+      color: #ffdcac;
+    }
   }
 }
 
 .cell_background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: #fff2;
-  width: 99px;
-  height: 74px;
   transform: translateY(-100%);
+  overflow: visible;
+  pointer-events: none;
+
+  line {
+    stroke-width: 15px;
+    stroke: #e3e3e3;
+  }
 }
