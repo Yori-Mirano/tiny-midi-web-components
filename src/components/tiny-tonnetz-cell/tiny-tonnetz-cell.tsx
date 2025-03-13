@@ -1,5 +1,5 @@
-import { Component, Host, h, Prop } from '@stencil/core';
-import { ActiveNotes, NoteIntervals, SemiToneCode } from "../../utils/models";
+import { Component, h, Host, Prop } from '@stencil/core';
+import { ActiveNotes, NoteIntervals, NoteStatus, SemiToneCode } from "../../utils/models";
 import { isBlackKeyNote } from "../../utils/utils";
 
 const NOTE_NAMES = [
@@ -38,6 +38,10 @@ export class TinyTonnetzCell {
     return this.activeNotes?.[this.semiToneCode]?.length > 0;
   }
 
+  getPressedNoteCount() {
+    return this.activeNotes?.[this.semiToneCode]?.filter(note => note.status === NoteStatus.PRESSED)?.length || 0;
+  }
+
   isMinorThirdIntervalActive() {
     return this.isActive() && this.activeNotes?.[(this.semiToneCode + NoteIntervals.MINOR_THIRD) % 12]?.length > 0
   }
@@ -68,7 +72,8 @@ export class TinyTonnetzCell {
         cell: true,
         '-primary': this.primary,
         '-blackKey': isBlackKeyNote(this.semiToneCode),
-        '-active': this.isActive()
+        '-active': this.isActive(),
+        '-pressed': this.getPressedNoteCount() > 0
       }}>
         <svg class="cell_background" width={this.width} height={this.height}>
           <defs>

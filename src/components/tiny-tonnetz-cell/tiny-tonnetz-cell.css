@@ -8,6 +8,7 @@
 }
 
 .cell_node {
+  --level: 0px;
   pointer-events: initial;
   position: absolute;
   top: 0;
@@ -20,12 +21,13 @@
   background: #f3f3f3;
   color: #888;
   border-radius: .5rem;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateY(calc(0px - var(--level)));
   font-size: .8rem;
   font-family: sans-serif;
   font-weight: bold;
   border: 2px solid transparent;
-  transition-property: box-shadow, background, color, border;
+  outline: 0 solid transparent;
+  transition-property: transform, box-shadow, background, color, border, outline-width, outline-color;
   transition-duration: 100ms;
 
   width: 30px;
@@ -40,14 +42,19 @@
   .cell.-active & {
     box-shadow:
       0 0 8px #0002,
-      0 8px 16px #0004;
-    background: #ffffff;
+      0 8px 16px #0004,
+      0 var(--level) 0 #000;
+    background: #fff;
     color: #000;
     border-color: #000;
   }
 
+  .cell.-active:not(.-pressed) & {
+    --level: 6px;
+  }
+
   .cell.-active.-blackKey & {
-    background: #000;
+    background: #434343;
     color: #fff;
   }
 }
@@ -60,6 +67,13 @@
   line {
     stroke-width: 8px;
     stroke: #e3e3e3;
+    stroke-dasharray: 22, 0;
+    transition-property: stroke, stroke-width, stroke-dasharray;
+    transition-duration: 100ms;
+
+    &.perfectFifth {
+      stroke-width: 4px;
+    }
 
     &.-active {
       stroke-width: 14px;
