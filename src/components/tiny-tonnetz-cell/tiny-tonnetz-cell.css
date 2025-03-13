@@ -1,63 +1,97 @@
-.cell {
-  --bold-color: hsl(346.15deg 54.55% 65.49%);
+tiny-tonnetz-cell {
   pointer-events: none;
-
-  &:not(.-primary) {
-    /*filter : contrast(.1) brightness(1.7);*/
-  }
 }
 
 .cell_node {
   --level: 0px;
+  --scale: 1;
   --count: 0;
+
   pointer-events: initial;
+  overflow: hidden;
   position: absolute;
   top: 0;
   left: 0;
   display: flex;
-  gap: 4px;
+  gap: 2px;
+  padding: 2px;
+  box-sizing: border-box;
   justify-content: center;
   align-items: center;
   text-align: center;
   background: #f3f3f3;
   color: #888;
-  border-radius: .5rem;
-  transform: translate(-50%, -50%) translateY(calc(0px - var(--level)));
+  border-radius: 8px;
+  transform: translate(-50%, -50%) translateY(calc(0px - var(--level))) scale(var(--scale));
   font-size: .8rem;
   font-family: sans-serif;
   font-weight: bold;
   border: 2px solid transparent;
   outline: calc(6px * var(--count)) solid transparent;
-  transition-property: transform, box-shadow, background, color, border, outline-width, outline-color;
+  transition-property: transform, box-shadow, background-color, color, border, outline-width, outline-color;
   transition-duration: 100ms;
 
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
 
-  .cell.-blackKey & {
+  &.-blackKey {
     background: #a1a1a1;
     color: #eee;
     font-size: .6rem;
   }
 
-  .cell.-active & {
+  & :first-child {
+    align-self: flex-start;
+  }
+
+  & :last-child {
+    align-self: flex-end;
+  }
+
+  &.-active {
+    --level: 2px;
     box-shadow:
-      0 0 8px #0002,
-      0 8px 16px #0004,
+      0 var(--level) calc(var(--level)) #0002,
+      0 calc(var(--level) * 2) calc(var(--level)) #0004,
       0 var(--level) 0 #000;
     background: #fff;
     color: #000;
     border-color: #000;
     outline-color: #0004;
+
+    &.-blackKey {
+      background: #434343;
+      color: #ddd;
+    }
+
+    &:not(.-pressed) { --level: 6px }
+    &.-completelyPressed { --level: 0px }
   }
 
-  .cell.-active:not(.-pressed) & {
-    --level: 6px;
-  }
+  &.-chordRoot {
+    --scale: 1.1;
+    --root-hue: 162;
+    background: hsl(var(--root-hue), 95%, 85%);
 
-  .cell.-active.-blackKey & {
-    background: #434343;
-    color: #fff;
+    &.-blackKey {
+      background: hsl(var(--root-hue) 36.19% 50.64%);
+      color: hsl(var(--root-hue), 100%, 95%);
+    }
+
+    &.-minorThird { --root-hue: 344 }
+    &.-majorThird { --root-hue: 273 }
+    &.-minorChord { --root-hue: 220 }
+    &.-majorChord { --root-hue: 23 }
+
+    &.-minorThird.-majorThird,
+    &.-minorChord.-majorChord {
+      background: hsl(0, 0%, 85%);
+
+      &.-blackKey {
+        background: hsl(0 0% 50.64%);
+        color: hsl(0, 0%, 95%);
+      }
+    }
   }
 }
 
@@ -78,19 +112,41 @@
     }
 
     &.-active {
-      stroke-width: 14px;
+      stroke-width: 12px;
       stroke: #333;
 
-      &.perfectFifth:not(.-alone) {
+      &.-chordActive {
         stroke-width: 1px;
         stroke-dasharray: 16, 6;
       }
     }
+
+    &.-pressed {
+      stroke-width: 14px;
+      stroke: #000;
+    }
   }
+}
+
+.cell_minorGradient,
+.cell_majorGradient {
+  stop {
+    &:first-child { stop-opacity: .5 }
+    &:last-child { stop-opacity: 0 }
+  }
+}
+
+.cell_minorGradient stop {
+  stop-color: hsl(220, 50%, 40%);
+}
+
+.cell_majorGradient stop {
+  stop-color: hsl(30 70% 50%);
 }
 
 .cell_minorChord {
   fill: none;
+
   &.-active {
     fill: url(#minor-grad);
   }

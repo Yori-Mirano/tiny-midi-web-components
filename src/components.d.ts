@@ -16,7 +16,6 @@ export namespace Components {
     interface TinyTonnetzCell {
         "activeNotes"?: ActiveNotes;
         "height": number;
-        "primary": boolean;
         "semiToneCode": SemiToneCode;
         "width": number;
     }
@@ -48,7 +47,6 @@ declare namespace LocalJSX {
     interface TinyTonnetzCell {
         "activeNotes"?: ActiveNotes;
         "height"?: number;
-        "primary"?: boolean;
         "semiToneCode"?: SemiToneCode;
         "width"?: number;
     }

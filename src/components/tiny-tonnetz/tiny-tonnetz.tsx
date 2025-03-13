@@ -96,8 +96,14 @@ export class TinyTonnetz {
     const halfNumCols = Math.floor(numCols / 2);
     const halfNumRows = Math.floor(numRows / 2);
 
-    for (let row = -halfNumRows; row < halfNumRows +(isEvenNumRows?0:1); row++) {
-      for (let col = -halfNumCols; col < halfNumCols +(isEvenNumCols?0:1); col++) {
+    const rowStart = -halfNumRows;
+    const colStart = -halfNumCols;
+
+    const rowEnd = halfNumRows + (isEvenNumRows ? 0 : 1);
+    const colEnd = halfNumCols + (isEvenNumCols ? 0 : 1);
+
+    for (let row = rowStart; row < rowEnd; row++) {
+      for (let col = colStart; col < colEnd; col++) {
         const semiToneCode = this.getSemiToneCodeFromCoordinates(col, row);
 
         let x = col * horizontalUnit;
@@ -110,15 +116,13 @@ export class TinyTonnetz {
         if (isEvenNumRows) {
           y -= verticalUnit / 2;
         }
-
-
+        
         content.push(
           this.generateCell(
             this.activeNotes,
             x, y,
             horizontalUnit, verticalUnit,
             semiToneCode,
-            this.isCentralCluster(col, row)
           )
         );
       }
@@ -146,14 +150,14 @@ export class TinyTonnetz {
     );
   }
 
-  generateCell(activeNotes: ActiveNotes, x: number, y: number, width: number, height: number, semiToneCode: SemiToneCode, primary: boolean) {
+  generateCell(activeNotes: ActiveNotes, x: number, y: number, width: number, height: number, semiToneCode: SemiToneCode) {
     return (
       <tiny-tonnetz-cell
+        key={`${x}-${y}`}
         activeNotes={activeNotes}
         width={width}
         height={height}
         semiToneCode={semiToneCode}
-        primary={primary}
         style={{translate:`${x}px ${y}px`, position: 'absolute'}}
       />
     );
