@@ -9,6 +9,7 @@
 
 .cell_node {
   --level: 0px;
+  --count: 0;
   pointer-events: initial;
   position: absolute;
   top: 0;
@@ -26,7 +27,7 @@
   font-family: sans-serif;
   font-weight: bold;
   border: 2px solid transparent;
-  outline: 0 solid transparent;
+  outline: calc(6px * var(--count)) solid transparent;
   transition-property: transform, box-shadow, background, color, border, outline-width, outline-color;
   transition-duration: 100ms;
 
@@ -47,6 +48,7 @@
     background: #fff;
     color: #000;
     border-color: #000;
+    outline-color: #0004;
   }
 
   .cell.-active:not(.-pressed) & {

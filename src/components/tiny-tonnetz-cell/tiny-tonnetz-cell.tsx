@@ -68,13 +68,15 @@ export class TinyTonnetzCell {
 
   render() {
     return (
-      <Host class={{
-        cell: true,
-        '-primary': this.primary,
-        '-blackKey': isBlackKeyNote(this.semiToneCode),
-        '-active': this.isActive(),
-        '-pressed': this.getPressedNoteCount() > 0
-      }}>
+      <Host
+        class={{
+          cell: true,
+          '-primary': this.primary,
+          '-blackKey': isBlackKeyNote(this.semiToneCode),
+          '-active': this.isActive(),
+          '-pressed': this.getPressedNoteCount() > 0
+        }}
+      >
         <svg class="cell_background" width={this.width} height={this.height}>
           <defs>
             <linearGradient id="major-grad" x1="100%" y1="100%" x2="0%" y2="0%" >
@@ -95,7 +97,13 @@ export class TinyTonnetzCell {
           <line x1={0} y1={this.height} x2={this.width} y2={this.height} class={{ '-active': this.isMajorThirdIntervalActive() }}/>
           <line x1={0} y1={this.height} x2={this.width} y2={0} class={{ perfectFifth: true, '-active': this.isPerfectFifthIntervalActive(), '-alone': this.isPerfetFifthIntervalActiveOnly() }}/>
         </svg>
-        <div class="cell_node" innerHTML={ getNoteNameFromSemiToneCode(this.semiToneCode) }/>
+        <div
+          class="cell_node"
+          style={{
+            '--count': `${this.getPressedNoteCount() - 1}`
+          }}
+          innerHTML={ getNoteNameFromSemiToneCode(this.semiToneCode) }
+        />
       </Host>
     );
   }
