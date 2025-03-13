@@ -7,22 +7,32 @@
 
     <script type="module" src="/build/tiny-midi-web-components.esm.js"></script>
     <script nomodule src="/build/tiny-midi-web-components.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/webmidi@latest/dist/iife/webmidi.iife.js"></script>
   </head>
   <body>
     <tiny-tonnetz scale="1" style="position: absolute; inset: 0; aspect-ratio: auto"/>
 
-    <script>
-      const tonnetzViz = document.querySelector('tiny-tonnetz');
+    <script type="module">
+      import { WebMidiTonnetzController } from '/build/index.esm.js';
 
-      if (tonnetzViz) {
-        tonnetzViz.activatedNotes = {
-          0: [{sustained: false}],
-          2: [{sustained: false}],
-          3: [{sustained: false}],
-          5: [{sustained: false}, {sustained: true}],
-          7: [{sustained: false}],
-          8: [{sustained: false}],
-        };
+      WebMidi
+        .enable()
+        .then(onEnabled)
+        .catch(err => alert(err));
+
+      function onEnabled() {
+        if (WebMidi.inputs.length < 1) {
+          console.log("No device detected.");
+
+        } else {
+          WebMidi.inputs.forEach((device, index) => {
+            console.log(`${index}: ${device.name}`);
+            const tonnetzViz = document.querySelector('tiny-tonnetz');
+            const webMidiTonnetzController = new WebMidiTonnetzController(tonnetzViz);
+            webMidiTonnetzController.listen(device);
+          });
+        }
       }
     </script>
   </body>

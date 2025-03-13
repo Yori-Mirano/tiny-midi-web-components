@@ -24,7 +24,9 @@
   font-size: .8rem;
   font-family: sans-serif;
   font-weight: bold;
-  transition: box-shadow 100ms;
+  border: 2px solid transparent;
+  transition-property: box-shadow, background, color, border;
+  transition-duration: 100ms;
 
   width: 30px;
   height: 30px;
@@ -36,16 +38,12 @@
   }
 
   .cell.-active & {
-    /*box-shadow:
-      0 0 8px hsla(346.15deg 54.55% 65.49% / 20%),
-      0 8px 16px hsla(346.15deg 54.55% 65.49% / 40%);
-    */
     box-shadow:
       0 0 8px #0002,
       0 8px 16px #0004;
     background: #ffffff;
     color: #000;
-    border: 2px solid #000;
+    border-color: #000;
   }
 
   .cell.-active.-blackKey & {
@@ -65,7 +63,6 @@
 
     &.-active {
       stroke-width: 14px;
-      /*stroke: hsl(346.15deg 54.55% 65.49%);*/
       stroke: #333;
 
       &.perfectFifth:not(.-alone) {
@@ -79,7 +76,6 @@
 .cell_minorChord {
   fill: none;
   &.-active {
-    /*fill : hsl(298.47deg 43.43% 52.68% / 20%);*/
     fill: url(#minor-grad);
   }
 }
@@ -88,6 +84,5 @@
   fill: none;
   &.-active {
     fill: url(#major-grad);
-    /*fill: hsl(7.7deg 100% 70.64% / 20%);*/
   }
 }

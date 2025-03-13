@@ -1,5 +1,6 @@
 import { Component, Host, h, Prop } from '@stencil/core';
-import { ActivatedNotes, NoteIntervals } from "../tiny-tonnetz/tiny-tonnetz";
+import { ActiveNotes, NoteIntervals, SemiToneCode } from "../../utils/models";
+import { isBlackKeyNote } from "../../utils/utils";
 
 const NOTE_NAMES = [
   'C',
@@ -16,14 +17,8 @@ const NOTE_NAMES = [
   'B'
 ];
 
-const BLACK_KEY_NOTE = [1, 3, 6, 8, 10];
-
 function getNoteNameFromSemiToneCode(semiToneCode: number): string {
   return NOTE_NAMES[semiToneCode];
-}
-
-function isBlackKeyNote(semiToneCode: number): boolean {
-  return BLACK_KEY_NOTE.includes(semiToneCode);
 }
 
 @Component({
@@ -33,26 +28,26 @@ function isBlackKeyNote(semiToneCode: number): boolean {
 })
 export class TinyTonnetzCell {
 
-  @Prop() activatedNotes?: ActivatedNotes;
+  @Prop() activeNotes?: ActiveNotes;
   @Prop() width: number;
   @Prop() height: number;
   @Prop() primary = false;
-  @Prop() semiToneCode = 0;
+  @Prop() semiToneCode: SemiToneCode = 0;
 
   isActive() {
-    return this.activatedNotes[this.semiToneCode]?.length > 0
+    return this.activeNotes?.[this.semiToneCode]?.length > 0;
   }
 
   isMinorThirdIntervalActive() {
-    return this.isActive() && this.activatedNotes[(this.semiToneCode + NoteIntervals.MINOR_THIRD) % 12]?.length > 0
+    return this.isActive() && this.activeNotes?.[(this.semiToneCode + NoteIntervals.MINOR_THIRD) % 12]?.length > 0
   }
 
   isMajorThirdIntervalActive() {
-    return this.isActive() && this.activatedNotes[(this.semiToneCode + NoteIntervals.MAJOR_THIRD) % 12]?.length > 0
+    return this.isActive() && this.activeNotes?.[(this.semiToneCode + NoteIntervals.MAJOR_THIRD) % 12]?.length > 0
   }
 
   isPerfectFifthIntervalActive() {
-    return this.isActive() && this.activatedNotes[(this.semiToneCode + NoteIntervals.PERFECT_FIFTH) % 12]?.length > 0
+    return this.isActive() && this.activeNotes?.[(this.semiToneCode + NoteIntervals.PERFECT_FIFTH) % 12]?.length > 0
   }
 
   isPerfetFifthIntervalActiveOnly() {

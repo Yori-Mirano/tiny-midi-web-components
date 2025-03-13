@@ -8,5 +8,8 @@
  * to consume components of this package as outlined in the `README.md`.
  */
 
+
+export { WebMidiTonnetzController } from "./utils/tonnetz-controllers/web-midi/web-midi.tonnetz-controller";
+export { ActiveNotes, Note, SemiToneCode, NoteStatus } from "./utils/models";
 export { format } from './utils/utils';
 export type * from './components.d.ts';

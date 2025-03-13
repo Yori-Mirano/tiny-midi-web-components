@@ -1,18 +1,5 @@
 import { Component, Host, h, Element, State, Prop } from '@stencil/core';
-
-export enum NoteIntervals {
-  MINOR_THIRD = 3,
-  MAJOR_THIRD = 4,
-  PERFECT_FIFTH = 7,
-}
-
-export type SemiToneCode = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-
-export type ActivatedNotes = Record<SemiToneCode, Array<Note>>;
-
-export interface Note {
-  sustained?: boolean;
-}
+import { ActiveNotes, NoteIntervals, SemiToneCode } from "../../utils/models";
 
 @Component({
   tag: 'tiny-tonnetz',
@@ -23,7 +10,7 @@ export class TinyTonnetz {
 
   @Element() el: HTMLElement;
 
-  @Prop() activatedNotes?: ActivatedNotes;
+  @Prop() activeNotes: ActiveNotes = {} as ActiveNotes;
   @Prop({ mutable: true }) scale = 1;
   @Prop() marginUnitCellCount = 1;
 
@@ -127,7 +114,7 @@ export class TinyTonnetz {
 
         content.push(
           this.generateCell(
-            this.activatedNotes,
+            this.activeNotes,
             x, y,
             horizontalUnit, verticalUnit,
             semiToneCode,
@@ -140,14 +127,14 @@ export class TinyTonnetz {
     return content;
   }
 
-  getSemiToneCodeFromCoordinates(col: number, row: number) {
+  getSemiToneCodeFromCoordinates(col: number, row: number): SemiToneCode {
     let semiTone = (col * NoteIntervals.MAJOR_THIRD + row * NoteIntervals.MINOR_THIRD) % 12;
 
     if (semiTone < 0) {
       semiTone = semiTone + 12;
     }
 
-    return semiTone;
+    return semiTone as SemiToneCode;
   }
 
   isCentralCluster(col: number, row: number) {
@@ -159,10 +146,10 @@ export class TinyTonnetz {
     );
   }
 
-  generateCell(activatedNotes:ActivatedNotes, x: number, y: number, width: number, height: number, semiToneCode: number, primary: boolean) {
+  generateCell(activeNotes: ActiveNotes, x: number, y: number, width: number, height: number, semiToneCode: SemiToneCode, primary: boolean) {
     return (
       <tiny-tonnetz-cell
-        activatedNotes={activatedNotes}
+        activeNotes={activeNotes}
         width={width}
         height={height}
         semiToneCode={semiToneCode}

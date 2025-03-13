@@ -5,21 +5,19 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { ActivatedNotes } from "./components/tiny-tonnetz/tiny-tonnetz";
-import { ActivatedNotes as ActivatedNotes1 } from "./components/tiny-tonnetz/tiny-tonnetz";
-export { ActivatedNotes } from "./components/tiny-tonnetz/tiny-tonnetz";
-export { ActivatedNotes as ActivatedNotes1 } from "./components/tiny-tonnetz/tiny-tonnetz";
+import { ActiveNotes, SemiToneCode } from "./utils/models";
+export { ActiveNotes, SemiToneCode } from "./utils/models";
 export namespace Components {
     interface TinyTonnetz {
-        "activatedNotes"?: ActivatedNotes;
+        "activeNotes": ActiveNotes;
         "marginUnitCellCount": number;
         "scale": number;
     }
     interface TinyTonnetzCell {
-        "activatedNotes"?: ActivatedNotes1;
+        "activeNotes"?: ActiveNotes;
         "height": number;
         "primary": boolean;
-        "semiToneCode": number;
+        "semiToneCode": SemiToneCode;
         "width": number;
     }
 }
@@ -43,15 +41,15 @@ declare global {
 }
 declare namespace LocalJSX {
     interface TinyTonnetz {
-        "activatedNotes"?: ActivatedNotes;
+        "activeNotes"?: ActiveNotes;
         "marginUnitCellCount"?: number;
         "scale"?: number;
     }
     interface TinyTonnetzCell {
-        "activatedNotes"?: ActivatedNotes1;
+        "activeNotes"?: ActiveNotes;
         "height"?: number;
         "primary"?: boolean;
-        "semiToneCode"?: number;
+        "semiToneCode"?: SemiToneCode;
         "width"?: number;
     }
     interface IntrinsicElements {
