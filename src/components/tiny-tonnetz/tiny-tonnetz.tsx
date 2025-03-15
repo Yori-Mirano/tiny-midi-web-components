@@ -1,4 +1,4 @@
-import { Component, Host, h, Element, State, Prop } from '@stencil/core';
+import { Component, Host, h, Element, State, Prop, Listen, Watch } from '@stencil/core';
 import { ActiveNotes, NoteIntervals, SemiToneCode } from "../../utils/models";
 import { Components } from "../../components";
 import TinyTonnetzCell = Components.TinyTonnetzCell;
@@ -10,24 +10,64 @@ import TinyTonnetzCell = Components.TinyTonnetzCell;
 })
 export class TinyTonnetz {
 
+  static readonly CLUSTER_HORIZONTAL_COUNT = 3;
+  static readonly CLUSTER_VERTICAL_COUNT = 12 / TinyTonnetz.CLUSTER_HORIZONTAL_COUNT;
+
+  static readonly SCALE_MIN = 0.5;
+  static readonly SCALE_MAX = 1.5;
+  static readonly SCALE_WHEEL_STEP = 0.125;
+
   @Element() el: HTMLElement;
 
   @Prop() activeNotes: ActiveNotes = {} as ActiveNotes;
   @Prop({ mutable: true }) scale = 1;
-  @Prop() marginUnitCellCount = 1;
+  @Prop() centralClusterMargin = 1;
+  @Prop({ attribute: 'scale-slider' }) isScaleSliderVisible = false;
+  @Prop({ attribute: 'scaling' }) isScalingEnabled = true;
 
-  @State() size: { width: number, height: number } = { width: 0, height: 0 };
+  @State() private size: { width: number, height: number } = { width: 0, height: 0 };
 
-  clusterHorizontalCount = 3;
-  clusterVerticalCount: number;
-  minHorizontalCount: number;
-  minVerticalCount: number;
-  resizeObserver: ResizeObserver;
+  private minHorizontalCount: number;
+  private minVerticalCount: number;
+  private resizeObserver: ResizeObserver;
+
+  @Watch('scale')
+  private clampScale(newValue: number) {
+    this.scale = Math.min(Math.max(newValue, TinyTonnetz.SCALE_MIN), TinyTonnetz.SCALE_MAX);
+  }
+
+  @Watch('centralClusterMargin')
+  private updateCentralClusterMargin(newValue: number) {
+    this.minHorizontalCount = TinyTonnetz.CLUSTER_HORIZONTAL_COUNT + newValue * 2;
+    this.minVerticalCount = TinyTonnetz.CLUSTER_VERTICAL_COUNT + newValue * 2;
+  }
+
+  @Listen('wheel')
+  handleScroll(e: WheelEvent) {
+    if (this.isScalingEnabled) {
+      let step: number;
+
+      switch (e.deltaMode) {
+        case WheelEvent.DOM_DELTA_PIXEL:
+          step = e.deltaY / 100;
+          break;
+
+        case WheelEvent.DOM_DELTA_LINE:
+          step = e.deltaY;
+          break;
+
+        case WheelEvent.DOM_DELTA_PAGE:
+          step = e.deltaY * 100;
+          break;
+      }
+
+      this.scale -= step * TinyTonnetz.SCALE_WHEEL_STEP;
+    }
+  }
 
   componentWillLoad() {
-    this.clusterVerticalCount = 12 / this.clusterHorizontalCount
-    this.minHorizontalCount = this.clusterHorizontalCount + this.marginUnitCellCount * 2;
-    this.minVerticalCount = this.clusterVerticalCount + this.marginUnitCellCount * 2;
+    this.clampScale(this.scale);
+    this.updateCentralClusterMargin(this.centralClusterMargin);
   }
 
   connectedCallback() {
@@ -70,10 +110,10 @@ export class TinyTonnetz {
     let scaleToFittingCentralCluster: number;
 
     if (aspectRatio > aspectRatioThreshold) {
-      scaleToFittingCentralCluster = this.size.height / (this.minVerticalCount * minorThirdLength);
+      scaleToFittingCentralCluster = this.size.height / (numRows * minorThirdLength);
       numCols = Math.floor(numCols * aspectRatio);
     } else {
-      scaleToFittingCentralCluster = this.size.width / (this.minHorizontalCount * majorThirdLength);
+      scaleToFittingCentralCluster = this.size.width / (numCols * majorThirdLength);
       numRows = Math.floor(numRows / aspectRatio * majorMinorThirdRatio);
     }
 
@@ -142,11 +182,11 @@ export class TinyTonnetz {
   }
 
   private hasHorizontalClusterSeparator(row: number) {
-    return (row - 1) % this.clusterVerticalCount === 0;
+    return (row - 1) % TinyTonnetz.CLUSTER_VERTICAL_COUNT === 0;
   }
 
   private hasVerticalClusterSeparator(col: number) {
-    return (col + 1) % this.clusterHorizontalCount === 0;
+    return (col + 1) % TinyTonnetz.CLUSTER_HORIZONTAL_COUNT === 0;
   }
 
   private getSemiToneCodeFromCoordinates(col: number, row: number): SemiToneCode {
@@ -163,9 +203,9 @@ export class TinyTonnetz {
     let offset = unit / 2;
 
     if (isHorizontal) {
-      offset -= Math.floor(this.clusterVerticalCount / 2 - 1) * unit;
+      offset -= Math.floor(TinyTonnetz.CLUSTER_VERTICAL_COUNT / 2 - 1) * unit;
     } else {
-      offset -= Math.floor(this.clusterHorizontalCount / 2) * unit;
+      offset -= Math.floor(TinyTonnetz.CLUSTER_HORIZONTAL_COUNT / 2) * unit;
     }
 
     return <div
@@ -202,18 +242,24 @@ export class TinyTonnetz {
           {this.generateGrid()}
         </div>
 
-        <input
-          class="tinyTonnetz_zoomSlider"
-          type="range" min="0.5" max="1.5" step="any" list="markers"
-          value={this.scale}
-          onInput={event => this.scale = parseFloat((event.target as HTMLInputElement).value)}
-        />
+        { (this.isScaleSliderVisible && this.isScalingEnabled) ?
+          <div>
+            <input
+              class="tinyTonnetz_scaleSlider"
+              type="range" min={TinyTonnetz.SCALE_MIN} max={TinyTonnetz.SCALE_MAX} step="any" list="markers"
+              value={this.scale}
+              onInput={event => this.scale = parseFloat((event.target as HTMLInputElement).value)}
+            />
 
-        <datalist id="markers">
-          <option value="0.25" label='-'></option>
-          <option value="1" label='1'></option>
-          <option value="1.75" label='+'></option>
-        </datalist>
+            <datalist id="markers">
+              <option value={TinyTonnetz.SCALE_MIN} label='-'></option>
+              <option value="1" label='1'></option>
+              <option value={TinyTonnetz.SCALE_MAX} label='+'></option>
+            </datalist>
+          </div>
+        :
+          null
+        }
       </Host>
     );
   }

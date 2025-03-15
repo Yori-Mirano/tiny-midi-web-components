@@ -10,7 +10,9 @@ export { ActiveNotes, SemiToneCode } from "./utils/models";
 export namespace Components {
     interface TinyTonnetz {
         "activeNotes": ActiveNotes;
-        "marginUnitCellCount": number;
+        "centralClusterMargin": number;
+        "isScaleSliderVisible": boolean;
+        "isScalingEnabled": boolean;
         "scale": number;
     }
     interface TinyTonnetzCell {
@@ -41,7 +43,9 @@ declare global {
 declare namespace LocalJSX {
     interface TinyTonnetz {
         "activeNotes"?: ActiveNotes;
-        "marginUnitCellCount"?: number;
+        "centralClusterMargin"?: number;
+        "isScaleSliderVisible"?: boolean;
+        "isScalingEnabled"?: boolean;
         "scale"?: number;
     }
     interface TinyTonnetzCell {
