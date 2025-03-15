@@ -11,6 +11,8 @@ export namespace Components {
     interface TinyTonnetz {
         "activeNotes": ActiveNotes;
         "centralClusterMargin": number;
+        "isDarkTheme": boolean;
+        "isLightTheme": boolean;
         "isScaleSliderVisible": boolean;
         "isScalingEnabled": boolean;
         "scale": number;
@@ -44,6 +46,8 @@ declare namespace LocalJSX {
     interface TinyTonnetz {
         "activeNotes"?: ActiveNotes;
         "centralClusterMargin"?: number;
+        "isDarkTheme"?: boolean;
+        "isLightTheme"?: boolean;
         "isScaleSliderVisible"?: boolean;
         "isScalingEnabled"?: boolean;
         "scale"?: number;

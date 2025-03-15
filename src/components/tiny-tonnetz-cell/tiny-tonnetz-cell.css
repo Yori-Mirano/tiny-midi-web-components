@@ -1,4 +1,18 @@
 tiny-tonnetz-cell {
+  --tinyTonnetz_theme_cell_text: light-dark(#c7c6c6, #3c3c3c);
+  --tinyTonnetz_theme_cell_text--blackKey: light-dark(#f3f3f3, #585858);
+  --tinyTonnetz_theme_cell_background: light-dark(#f3f3f3, #4c4c4c);
+  --tinyTonnetz_theme_cell_background--blackKey: light-dark(#cbcbcb, #3a3a3a);
+
+  --tinyTonnetz_theme_cell_text--active: light-dark(#000, #000);
+  --tinyTonnetz_theme_cell_text--active-blackKey: light-dark(#ddd, #9d9d9d);
+  --tinyTonnetz_theme_cell_background--active: light-dark(#fff, #777);
+  --tinyTonnetz_theme_cell_background--active-blackKey: light-dark(#434343, #1e1e1e);
+
+  --tinyTonnetz_theme_link: light-dark(#e3e3e3, #424242);
+  --tinyTonnetz_theme_link--active: light-dark(#333, #222);
+  --tinyTonnetz_theme_link--pressed: light-dark(#000, #000);
+
   pointer-events: none;
 }
 
@@ -18,8 +32,8 @@ tiny-tonnetz-cell {
   justify-content: center;
   align-items: center;
   text-align: center;
-  background: #f3f3f3;
-  color: #888;
+  background: var(--tinyTonnetz_theme_cell_background);
+  color: var(--tinyTonnetz_theme_cell_text);
   border-radius: 25%;
   transform: translate(-50%, -50%) translateY(calc(0px - var(--level))) scale(var(--scale));
   font-size: .8rem;
@@ -35,8 +49,8 @@ tiny-tonnetz-cell {
 
   &.-blackKey {
     justify-content: space-between;
-    background: #a1a1a1;
-    color: #eee;
+    background: var(--tinyTonnetz_theme_cell_background--blackKey);
+    color: var(--tinyTonnetz_theme_cell_text--blackKey);
     font-size: .6rem;
   }
 
@@ -54,14 +68,14 @@ tiny-tonnetz-cell {
       0 var(--level) calc(var(--level)) #0002,
       0 calc(var(--level) * 2) calc(var(--level)) #0004,
       0 var(--level) 0 #000;
-    background: #fff;
-    color: #000;
+    background: var(--tinyTonnetz_theme_cell_background--active);
+    color: var(--tinyTonnetz_theme_cell_text--active);
     border-color: #000;
     outline-color: #0004;
 
     &.-blackKey {
-      background: #434343;
-      color: #ddd;
+      background: var(--tinyTonnetz_theme_cell_background--active-blackKey);
+      color: var(--tinyTonnetz_theme_cell_text--active-blackKey);
     }
 
     &:not(.-pressed) { --level: 6px }
@@ -71,11 +85,11 @@ tiny-tonnetz-cell {
   &.-chordRoot {
     --scale: 1.1;
     --root-hue: 162;
-    background: hsl(var(--root-hue), 95%, 85%);
+    background: light-dark(hsl(var(--root-hue), 95%, 85%), hsl(var(--root-hue), 25%, 55%));
 
     &.-blackKey {
-      background: hsl(var(--root-hue) 36.19% 50.64%);
-      color: hsl(var(--root-hue), 100%, 95%);
+      background: light-dark(hsl(var(--root-hue) 36% 50%), hsl(var(--root-hue) 30% 30%));
+      color: light-dark(hsl(var(--root-hue), 100%, 90%), hsl(var(--root-hue), 30%, 65%));
     }
 
     &.-minorThird { --root-hue: 344 }
@@ -85,11 +99,11 @@ tiny-tonnetz-cell {
 
     &.-minorThird.-majorThird,
     &.-minorChord.-majorChord {
-      background: hsl(0, 0%, 85%);
+      background: light-dark(hsl(0, 0%, 85%), hsl(0, 0%, 55%));
 
       &.-blackKey {
-        background: hsl(0 0% 50.64%);
-        color: hsl(0, 0%, 95%);
+        background: light-dark(hsl(0 0% 50%), hsl(0 0% 20%));
+        color: light-dark(hsl(0, 0%, 95%), hsl(0, 0%, 60%));
       }
     }
   }
@@ -102,7 +116,7 @@ tiny-tonnetz-cell {
 
   line {
     stroke-width: 8px;
-    stroke: #e3e3e3;
+    stroke: var(--tinyTonnetz_theme_link);
     stroke-dasharray: 22, 0;
     transition-property: stroke, stroke-width, stroke-dasharray;
     transition-duration: 100ms;
@@ -113,7 +127,7 @@ tiny-tonnetz-cell {
 
     &.-active {
       stroke-width: 12px;
-      stroke: #333;
+      stroke: var(--tinyTonnetz_theme_link--active);
 
       &.-chordActive {
         stroke-width: 1px;
@@ -123,7 +137,7 @@ tiny-tonnetz-cell {
 
     &.-pressed {
       stroke-width: 14px;
-      stroke: #000;
+      stroke: var(--tinyTonnetz_theme_link--pressed);
     }
   }
 }
@@ -137,11 +151,11 @@ tiny-tonnetz-cell {
 }
 
 .cell_minorGradient stop {
-  stop-color: hsl(220, 50%, 40%);
+  stop-color: light-dark(hsl(220 50% 40%), hsl(220 40% 50%));
 }
 
 .cell_majorGradient stop {
-  stop-color: hsl(30 70% 50%);
+  stop-color: light-dark(hsl(30 70% 50%), hsl(30 40% 50%));
 }
 
 .cell_minorChord {

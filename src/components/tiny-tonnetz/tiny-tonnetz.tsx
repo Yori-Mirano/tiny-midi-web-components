@@ -19,11 +19,13 @@ export class TinyTonnetz {
 
   @Element() el: HTMLElement;
 
-  @Prop() activeNotes: ActiveNotes = {} as ActiveNotes;
+  @Prop() activeNotes: ActiveNotes = {};
   @Prop({ mutable: true }) scale = 1;
   @Prop() centralClusterMargin = 1;
-  @Prop({ attribute: 'scale-slider' }) isScaleSliderVisible = false;
+  @Prop({ attribute: 'scale-slider' }) isScaleSliderVisible = true;
   @Prop({ attribute: 'scaling' }) isScalingEnabled = true;
+  @Prop({ attribute: 'force-light-theme' }) isLightTheme = false;
+  @Prop({ attribute: 'force-dark-theme' }) isDarkTheme = false;
 
   @State() private size: { width: number, height: number } = { width: 0, height: 0 };
 
@@ -53,11 +55,11 @@ export class TinyTonnetz {
           break;
 
         case WheelEvent.DOM_DELTA_LINE:
-          step = e.deltaY;
+          step = e.deltaY > 0 ? 1 : -1;
           break;
 
         case WheelEvent.DOM_DELTA_PAGE:
-          step = e.deltaY * 100;
+          step = e.deltaY > 0 ? 100 : -100;
           break;
       }
 
@@ -180,9 +182,9 @@ export class TinyTonnetz {
         if (col === -1 && row === -2) {
           legend = (
             <div class="tinyTonnetz_legend" style={{ translate:`${x}px ${y}px` }}>
-              <div class="tinyTonnetz_legend_minorThird">m3</div>
-              <div class="tinyTonnetz_legend_majorThird">M3</div>
-              <div class="tinyTonnetz_legend_perfectFifth">P5</div>
+              <div class="tinyTonnetz_legend_minorThird">3 🡆</div>
+              <div class="tinyTonnetz_legend_majorThird">4 🡆</div>
+              <div class="tinyTonnetz_legend_perfectFifth">🡄 5</div>
             </div>
           );
         }
@@ -248,7 +250,7 @@ export class TinyTonnetz {
     }
 
     return (
-      <Host>
+      <Host style={{ colorScheme: this.isLightTheme ? 'light' : (this.isDarkTheme ? 'dark': 'light dark')}}>
         <div class="tinyTonnetz_anchor">
           {this.generateGrid()}
         </div>
