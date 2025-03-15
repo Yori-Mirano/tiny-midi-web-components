@@ -36,3 +36,32 @@
     rotate: 270deg;
   }
 }
+
+.tinyTonnetz_legend {
+  position: absolute;
+  font-family: sans-serif;
+  font-size: 10px;
+  color: #bbb;
+}
+
+.tinyTonnetz_legend_minorThird {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: max-content;
+  transform: translateY(-50%) rotate(270deg) translateX(30px);
+  transform-origin: left center;
+}
+
+.tinyTonnetz_legend_majorThird {
+  position: absolute;
+  width: max-content;
+  transform: translateY(-50%) translateX(30px);
+}
+
+.tinyTonnetz_legend_perfectFifth {
+  position: absolute;
+  width: max-content;
+  transform: translateY(-50%) rotate(322deg) translateX(-45px);
+  transform-origin: left center;
+}

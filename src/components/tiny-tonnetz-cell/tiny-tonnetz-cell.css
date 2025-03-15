@@ -13,15 +13,14 @@ tiny-tonnetz-cell {
   top: 0;
   left: 0;
   display: flex;
-  gap: 2px;
-  padding: 2px;
+  padding: 2%;
   box-sizing: border-box;
   justify-content: center;
   align-items: center;
   text-align: center;
   background: #f3f3f3;
   color: #888;
-  border-radius: 8px;
+  border-radius: 25%;
   transform: translate(-50%, -50%) translateY(calc(0px - var(--level))) scale(var(--scale));
   font-size: .8rem;
   font-family: sans-serif;
@@ -31,10 +30,11 @@ tiny-tonnetz-cell {
   transition-property: transform, box-shadow, background-color, color, border, outline-width, outline-color;
   transition-duration: 100ms;
 
-  width: 34px;
   height: 34px;
+  aspect-ratio: 1;
 
   &.-blackKey {
+    justify-content: space-between;
     background: #a1a1a1;
     color: #eee;
     font-size: .6rem;

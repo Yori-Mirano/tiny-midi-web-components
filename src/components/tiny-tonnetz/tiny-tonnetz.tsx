@@ -130,6 +130,7 @@ export class TinyTonnetz {
   }
 
   private generateCells(numCols: number, numRows: number, horizontalUnit: number, verticalUnit: number) {
+    let legend: HTMLElement;
     const cells: Array<TinyTonnetzCell> = [];
     const clusterGrid: Array<HTMLDivElement> = [];
 
@@ -175,10 +176,20 @@ export class TinyTonnetz {
         cells.push(
           this.createCell(this.activeNotes, x, y, horizontalUnit, verticalUnit, semiToneCode)
         );
+
+        if (col === -1 && row === -2) {
+          legend = (
+            <div class="tinyTonnetz_legend" style={{ translate:`${x}px ${y}px` }}>
+              <div class="tinyTonnetz_legend_minorThird">m3</div>
+              <div class="tinyTonnetz_legend_majorThird">M3</div>
+              <div class="tinyTonnetz_legend_perfectFifth">P5</div>
+            </div>
+          );
+        }
       }
     }
 
-    return [cells, clusterGrid];
+    return [cells, clusterGrid, legend];
   }
 
   private hasHorizontalClusterSeparator(row: number) {
@@ -224,7 +235,7 @@ export class TinyTonnetz {
         semiToneCode={semiToneCode}
         style={{
           position: 'absolute',
-          translate:`${x}px ${y}px`
+          translate: `${x}px ${y}px`,
         }}
       />
     );
