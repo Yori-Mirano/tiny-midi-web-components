@@ -8,10 +8,6 @@
   aspect-ratio: 1;
 }
 
-.-highlight {
-  fill: yellow;
-}
-
 .tinyTonnetz_anchor {
   position: relative;
   overflow: visible;
@@ -28,4 +24,15 @@
   z-index: 1;
   writing-mode: vertical-lr;
   direction: rtl;
+}
+
+.tinyTonnetz_clusterSeparator {
+  position: absolute;
+  border-left: 1px solid #000;
+  height: 10000vmax;
+  transform-origin: top;
+
+  &.-horizontal {
+    rotate: 270deg;
+  }
 }
