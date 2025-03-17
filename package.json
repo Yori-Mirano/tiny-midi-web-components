@@ -1,6 +1,6 @@
 {
   "name": "tiny-midi-web-components",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "A set of web components made to interact with midi devices",
   "author": "Yori Mirano <yori.mirano@gmail.com>",
   "main": "dist/index.cjs.js",
@@ -13,6 +13,9 @@
     ".": {
       "import": "./dist/tiny-midi-web-components/tiny-midi-web-components.esm.js",
       "require": "./dist/tiny-midi-web-components/tiny-midi-web-components.cjs.js"
+    },
+    "./index": {
+      "import": "./dist/tiny-midi-web-components/index.esm.js"
     },
     "./my-component": {
       "import": "./dist/components/my-component.js",
