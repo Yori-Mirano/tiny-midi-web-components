@@ -1,7 +1,8 @@
 import { Component, Host, h, Element, State, Prop, Listen, Watch } from '@stencil/core';
-import { ActiveNotes, NoteIntervals, SemiToneCode } from "../../utils/models";
+import { ActiveNotes, NoteIntervals, SEMI_TONE_COUNT, SemiToneCode } from "../../utils/models";
 import { Components } from "../../components";
 import TinyTonnetzCell = Components.TinyTonnetzCell;
+import { LocalStorage } from "../../utils/decorators/local-storage.decorator";
 
 @Component({
   tag: 'tiny-tonnetz',
@@ -10,8 +11,11 @@ import TinyTonnetzCell = Components.TinyTonnetzCell;
 })
 export class TinyTonnetz {
 
-  static readonly CLUSTER_HORIZONTAL_COUNT = 3;
-  static readonly CLUSTER_VERTICAL_COUNT = 12 / TinyTonnetz.CLUSTER_HORIZONTAL_COUNT;
+  static readonly HORIZONTAL_SEMI_TONE_UNIT = 4;
+  static readonly VERTICAL_SEMI_TONE_UNIT = 3;
+
+  static readonly CLUSTER_HORIZONTAL_COUNT = SEMI_TONE_COUNT / TinyTonnetz.HORIZONTAL_SEMI_TONE_UNIT;
+  static readonly CLUSTER_VERTICAL_COUNT = SEMI_TONE_COUNT / TinyTonnetz.VERTICAL_SEMI_TONE_UNIT;
 
   static readonly SCALE_MIN = 0.5;
   static readonly SCALE_MAX = 1.5;
@@ -19,13 +23,16 @@ export class TinyTonnetz {
 
   @Element() el: HTMLElement;
 
+  get id() { return this.el.id; }
+
   @Prop() activeNotes: ActiveNotes = {};
-  @Prop({ mutable: true }) scale = 1;
   @Prop() centralClusterMargin = 1;
-  @Prop({ attribute: 'scale-slider' }) isScaleSliderVisible = true;
-  @Prop({ attribute: 'scaling' }) isScalingEnabled = true;
-  @Prop({ attribute: 'force-light-theme' }) isLightTheme = false;
-  @Prop({ attribute: 'force-dark-theme' }) isDarkTheme = false;
+  @Prop({ attribute: 'scale-slider' }) isScaleSliderVisible: boolean = true;
+  @Prop({ attribute: 'scaling' }) isScalingEnabled: boolean = true;
+  @LocalStorage('id') @Prop({ mutable: true }) scale = 1;
+  @LocalStorage('id') @Prop({ mutable: true, attribute: 'force-light-theme' }) isLightTheme: boolean = false;
+  @LocalStorage('id') @Prop({ mutable: true, attribute: 'force-dark-theme' }) isDarkTheme: boolean =  false;
+
 
   @State() private size: { width: number, height: number } = { width: 0, height: 0 };
 
@@ -255,24 +262,48 @@ export class TinyTonnetz {
           {this.generateGrid()}
         </div>
 
-        { (this.isScaleSliderVisible && this.isScalingEnabled) ?
-          <div>
-            <input
-              class="tinyTonnetz_scaleSlider"
-              type="range" min={TinyTonnetz.SCALE_MIN} max={TinyTonnetz.SCALE_MAX} step="any" list="markers"
-              value={this.scale}
-              onInput={event => this.scale = parseFloat((event.target as HTMLInputElement).value)}
-            />
+        <div class="tinyTonnetz_controls">
+          <div class="tinyTonnetz_themeSwitcher">
+            <button
+              class={{'-active': this.isLightTheme && !this.isDarkTheme}}
+              onClick={() => { this.isLightTheme = true; this.isDarkTheme = false; }}
+            >
+              ☀
+            </button>
 
-            <datalist id="markers">
-              <option value={TinyTonnetz.SCALE_MIN} label='-'></option>
-              <option value="1" label='1'></option>
-              <option value={TinyTonnetz.SCALE_MAX} label='+'></option>
-            </datalist>
+            <button
+              class={{'-active': !this.isLightTheme && !this.isDarkTheme}}
+              onClick={() => { this.isLightTheme = false; this.isDarkTheme = false; }}
+            >
+              ⇅
+            </button>
+            <button
+              class={{'-active': !this.isLightTheme && this.isDarkTheme}}
+              onClick={() => { this.isLightTheme = false; this.isDarkTheme = true; }}
+            >
+              🟆
+            </button>
           </div>
-        :
-          null
-        }
+
+          { (this.isScaleSliderVisible && this.isScalingEnabled) ?
+            <div>
+              <input
+                class="tinyTonnetz_scaleSlider"
+                type="range" min={TinyTonnetz.SCALE_MIN} max={TinyTonnetz.SCALE_MAX} step="any" list="markers"
+                value={this.scale}
+                onInput={event => this.scale = parseFloat((event.target as HTMLInputElement).value)}
+              />
+
+              <datalist id="markers">
+                <option value={TinyTonnetz.SCALE_MIN} label='-'></option>
+                <option value="1" label='1'></option>
+                <option value={TinyTonnetz.SCALE_MAX} label='+'></option>
+              </datalist>
+            </div>
+          :
+            null
+          }
+        </div>
       </Host>
     );
   }
