@@ -1,24 +1,21 @@
 import { Component, h, Host, Prop } from '@stencil/core';
-import { NoteState, SemiToneCode } from "../../utils/models";
+import { NoteNamingConventions, NoteState, SemiToneCode } from "../../utils/models";
 import { isBlackKeyNote } from "../../utils/utils";
+import { getNoteNames, NOTE_NAMES } from "../../utils/note-names";
 
-const NOTE_NAMES = [
-  'C',
-  '<span>C<sup>♯</sup></span> <span>D<sup>b</sup></span>',
-  'D',
-  '<span>D<sup>♯</sup></span> <span>E<sup>b</sup></span>',
-  'E',
-  'F',
-  '<span>F<sup>♯</sup></span> <span>G<sup>b</sup></span>',
-  'G',
-  '<span>G<sup>♯</sup></span> <span>A<sup>b</sup></span>',
-  'A',
-  '<span>A<sup>♯</sup></span> <span>B<sup>b</sup></span>',
-  'B'
-];
+const HTML_NOTE_NAMES = {
+  [NoteNamingConventions.LATIN]: getHtmlNoteNames(getNoteNames(NOTE_NAMES.LATIN)),
+  [NoteNamingConventions.ENGLISH]: getHtmlNoteNames(getNoteNames(NOTE_NAMES.ENGLISH)),
+};
 
-function getNoteNameFromSemiToneCode(semiToneCode: number): string {
-  return NOTE_NAMES[semiToneCode];
+function getHtmlNoteNames(noteNames: string[]) {
+  return noteNames.map(noteName => {
+    return noteName.replace(/(\p{L}+)([♯b])/gu, '<span>$1<sup>$2</sup></span>');
+  });
+}
+
+function getNoteNameFromSemiToneCode(semiToneCode: number, noteNamingConvention: NoteNamingConventions): string {
+  return HTML_NOTE_NAMES[noteNamingConvention][semiToneCode];
 }
 
 @Component({
@@ -28,10 +25,11 @@ function getNoteNameFromSemiToneCode(semiToneCode: number): string {
 })
 export class TinyTonnetzCell {
 
-  @Prop() cellStates?: any;
+  @Prop() cellStates: any;
   @Prop() width: number;
   @Prop() height: number;
   @Prop() semiToneCode: SemiToneCode = 0;
+  @Prop() noteNamingConvention: NoteNamingConventions = NoteNamingConventions.ENGLISH;
 
   render() {
     return (
@@ -102,7 +100,7 @@ export class TinyTonnetzCell {
           style={{
             '--count': `${this.cellStates[this.semiToneCode]?.count - 1}`
           }}
-          innerHTML={ getNoteNameFromSemiToneCode(this.semiToneCode) }
+          innerHTML={ getNoteNameFromSemiToneCode(this.semiToneCode, this.noteNamingConvention) }
         />
       </Host>
     );

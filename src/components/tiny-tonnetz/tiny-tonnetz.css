@@ -35,6 +35,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  font-family: sans-serif;
 }
 
 .tinyTonnetz_themeSwitcher {
@@ -45,15 +46,22 @@
   width: 30px;
   overflow: hidden;
   box-shadow: var(--tinyTonnetz_theme_controls_shadow);
-  font-size: 18px;
+  font-size: 14px;
+  font-weight: bold;
   background: light-dark(#c9c9c9, #444);
   gap: 1px;
+
+  &.-icons {
+    font-size: 18px;
+    font-weight: normal;
+  }
 
   > * {
     border: none;
     width: 100%;
     aspect-ratio: 1;
     font-size: inherit;
+    font-weight: inherit;
     color: light-dark(#585858, #9b9b9b);
     background: var(--tinyTonnetz_theme_controls_background);
 

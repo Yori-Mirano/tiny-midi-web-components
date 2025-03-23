@@ -5,8 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { ActiveNotes, SemiToneCode } from "./utils/models";
-export { ActiveNotes, SemiToneCode } from "./utils/models";
+import { ActiveNotes, NoteNamingConventions, SemiToneCode } from "./utils/models";
+export { ActiveNotes, NoteNamingConventions, SemiToneCode } from "./utils/models";
 export namespace Components {
     interface TinyTonnetz {
         "activeNotes": ActiveNotes;
@@ -15,11 +15,14 @@ export namespace Components {
         "isLightTheme": boolean;
         "isScaleSliderVisible": boolean;
         "isScalingEnabled": boolean;
+        "noteNamingConvention": NoteNamingConventions;
+        "noteNamingConventionOptions": Array<NoteNamingConventions>;
         "scale": number;
     }
     interface TinyTonnetzCell {
-        "cellStates"?: any;
+        "cellStates": any;
         "height": number;
+        "noteNamingConvention": NoteNamingConventions;
         "semiToneCode": SemiToneCode;
         "width": number;
     }
@@ -50,11 +53,14 @@ declare namespace LocalJSX {
         "isLightTheme"?: boolean;
         "isScaleSliderVisible"?: boolean;
         "isScalingEnabled"?: boolean;
+        "noteNamingConvention"?: NoteNamingConventions;
+        "noteNamingConventionOptions"?: Array<NoteNamingConventions>;
         "scale"?: number;
     }
     interface TinyTonnetzCell {
         "cellStates"?: any;
         "height"?: number;
+        "noteNamingConvention"?: NoteNamingConventions;
         "semiToneCode"?: SemiToneCode;
         "width"?: number;
     }

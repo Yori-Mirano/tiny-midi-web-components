@@ -1,4 +1,4 @@
-import { ActiveNotes, NoteIntervals, NoteKey, NoteState, SemiToneCode } from "./models";
+import { ActiveNotes, NoteIntervals, NoteKey, NoteState, SEMI_TONE_COUNT, SemiToneCode } from "./models";
 
 
 export function getComputeCellStates(activeNotes: ActiveNotes) {
@@ -58,9 +58,9 @@ function hasChordActive(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
 
 function isChordRoot(activeNotes: ActiveNotes, semiToneCode: SemiToneCode): boolean {
   return hasInterval(activeNotes, semiToneCode)
-    && !activeNotes?.[(12 + semiToneCode - NoteIntervals.MINOR_THIRD) % 12]?.length
-    && !activeNotes?.[(12 + semiToneCode - NoteIntervals.MAJOR_THIRD) % 12]?.length
-    && !activeNotes?.[(12 + semiToneCode - NoteIntervals.PERFECT_FIFTH) % 12]?.length;
+    && !activeNotes?.[(SEMI_TONE_COUNT + semiToneCode - NoteIntervals.MINOR_THIRD) % SEMI_TONE_COUNT]?.length
+    && !activeNotes?.[(SEMI_TONE_COUNT + semiToneCode - NoteIntervals.MAJOR_THIRD) % SEMI_TONE_COUNT]?.length
+    && !activeNotes?.[(SEMI_TONE_COUNT + semiToneCode - NoteIntervals.PERFECT_FIFTH) % SEMI_TONE_COUNT]?.length;
 }
 
 function isMinorChordActive(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
@@ -76,28 +76,28 @@ function hasInterval(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
 }
 
 function isMinorThirdIntervalActive(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
-  return isNoteActive(activeNotes[semiToneCode]) && activeNotes?.[(semiToneCode + NoteIntervals.MINOR_THIRD) % 12]?.length > 0
+  return isNoteActive(activeNotes[semiToneCode]) && activeNotes?.[(semiToneCode + NoteIntervals.MINOR_THIRD) % SEMI_TONE_COUNT]?.length > 0
 }
 
 function isMinorThirdIntervalPressed(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
   return isPressed(activeNotes[semiToneCode])
-    && activeNotes?.[(semiToneCode + NoteIntervals.MINOR_THIRD) % 12]?.filter(note => note.state === NoteState.PRESSED)?.length
+    && activeNotes?.[(semiToneCode + NoteIntervals.MINOR_THIRD) % SEMI_TONE_COUNT]?.filter(note => note.state === NoteState.PRESSED)?.length
 }
 
 function isMajorThirdIntervalActive(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
-  return isNoteActive(activeNotes[semiToneCode]) && activeNotes?.[(semiToneCode + NoteIntervals.MAJOR_THIRD) % 12]?.length > 0
+  return isNoteActive(activeNotes[semiToneCode]) && activeNotes?.[(semiToneCode + NoteIntervals.MAJOR_THIRD) % SEMI_TONE_COUNT]?.length > 0
 }
 
 function isMajorThirdIntervalPressed(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
   return isPressed(activeNotes[semiToneCode])
-    && activeNotes?.[(semiToneCode + NoteIntervals.MAJOR_THIRD) % 12]?.filter(note => note.state === NoteState.PRESSED)?.length
+    && activeNotes?.[(semiToneCode + NoteIntervals.MAJOR_THIRD) % SEMI_TONE_COUNT]?.filter(note => note.state === NoteState.PRESSED)?.length
 }
 
 function isPerfectFifthIntervalActive(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
-  return isNoteActive(activeNotes[semiToneCode]) && activeNotes?.[(semiToneCode + NoteIntervals.PERFECT_FIFTH) % 12]?.length > 0
+  return isNoteActive(activeNotes[semiToneCode]) && activeNotes?.[(semiToneCode + NoteIntervals.PERFECT_FIFTH) % SEMI_TONE_COUNT]?.length > 0
 }
 
 function isPerfectFifthIntervalPressed(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
   return isPressed(activeNotes[semiToneCode])
-    && activeNotes?.[(semiToneCode + NoteIntervals.PERFECT_FIFTH) % 12]?.filter(note => note.state === NoteState.PRESSED)?.length
+    && activeNotes?.[(semiToneCode + NoteIntervals.PERFECT_FIFTH) % SEMI_TONE_COUNT]?.filter(note => note.state === NoteState.PRESSED)?.length
 }

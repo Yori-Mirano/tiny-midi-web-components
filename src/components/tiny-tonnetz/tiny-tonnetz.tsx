@@ -1,9 +1,10 @@
 import { Component, Element, h, Host, Listen, Prop, State, Watch } from '@stencil/core';
-import { ActiveNotes, NoteIntervals, SEMI_TONE_COUNT, SemiToneCode } from "../../utils/models";
+import { ActiveNotes, NoteIntervals, NoteNamingConventions, SEMI_TONE_COUNT, SemiToneCode } from "../../utils/models";
 import { Components } from "../../components";
 import { LocalStorage } from "../../utils/decorators/local-storage.decorator";
-import TinyTonnetzCell = Components.TinyTonnetzCell;
 import { getComputeCellStates } from "../../utils/get-compute-cell-states.function";
+import { NOTE_NAMES } from "../../utils/note-names";
+import TinyTonnetzCell = Components.TinyTonnetzCell;
 
 @Component({
   tag: 'tiny-tonnetz',
@@ -33,6 +34,11 @@ export class TinyTonnetz {
   @LocalStorage('id') @Prop({ mutable: true }) scale = 1;
   @LocalStorage('id') @Prop({ mutable: true, attribute: 'force-light-theme' }) isLightTheme: boolean = false;
   @LocalStorage('id') @Prop({ mutable: true, attribute: 'force-dark-theme' }) isDarkTheme: boolean =  false;
+  @LocalStorage('id') @Prop({ mutable: true }) noteNamingConvention: NoteNamingConventions = NoteNamingConventions.ENGLISH;
+  @Prop() noteNamingConventionOptions: Array<NoteNamingConventions> = [
+    NoteNamingConventions.ENGLISH,
+    NoteNamingConventions.LATIN,
+  ];
 
   @State() private size: { width: number, height: number } = { width: 0, height: 0 };
 
@@ -244,6 +250,7 @@ export class TinyTonnetz {
         width={width}
         height={height}
         semiToneCode={semiToneCode}
+        noteNamingConvention={this.noteNamingConvention}
         style={{
           position: 'absolute',
           translate: `${x}px ${y}px`,
@@ -266,6 +273,19 @@ export class TinyTonnetz {
 
         <div class="tinyTonnetz_controls">
           <div class="tinyTonnetz_themeSwitcher">
+            {this.noteNamingConventionOptions.map(namingConvention => {
+              return (
+                <button
+                  class={{ '-active': this.noteNamingConvention === namingConvention }}
+                  onClick={() => { this.noteNamingConvention = namingConvention }}
+                >
+                  { NOTE_NAMES[namingConvention][0] }
+                </button>
+              );
+            })}
+          </div>
+
+          <div class="tinyTonnetz_themeSwitcher -icons">
             <button
               class={{'-active': this.isLightTheme && !this.isDarkTheme}}
               onClick={() => { this.isLightTheme = true; this.isDarkTheme = false; }}
