@@ -1,8 +1,9 @@
-import { Component, Host, h, Element, State, Prop, Listen, Watch } from '@stencil/core';
+import { Component, Element, h, Host, Listen, Prop, State, Watch } from '@stencil/core';
 import { ActiveNotes, NoteIntervals, SEMI_TONE_COUNT, SemiToneCode } from "../../utils/models";
 import { Components } from "../../components";
-import TinyTonnetzCell = Components.TinyTonnetzCell;
 import { LocalStorage } from "../../utils/decorators/local-storage.decorator";
+import TinyTonnetzCell = Components.TinyTonnetzCell;
+import { getComputeCellStates } from "../../utils/get-compute-cell-states.function";
 
 @Component({
   tag: 'tiny-tonnetz',
@@ -32,7 +33,6 @@ export class TinyTonnetz {
   @LocalStorage('id') @Prop({ mutable: true }) scale = 1;
   @LocalStorage('id') @Prop({ mutable: true, attribute: 'force-light-theme' }) isLightTheme: boolean = false;
   @LocalStorage('id') @Prop({ mutable: true, attribute: 'force-dark-theme' }) isDarkTheme: boolean =  false;
-
 
   @State() private size: { width: number, height: number } = { width: 0, height: 0 };
 
@@ -155,6 +155,8 @@ export class TinyTonnetz {
     const rowEnd = halfNumRows + (isEvenNumRows ? 0 : 1);
     const colEnd = halfNumCols + (isEvenNumCols ? 0 : 1);
 
+    const cellStates = getComputeCellStates(this.activeNotes);
+
     for (let row = rowStart; row < rowEnd; row++) {
       for (let col = colStart; col < colEnd; col++) {
         const semiToneCode = this.getSemiToneCodeFromCoordinates(col, row);
@@ -183,7 +185,7 @@ export class TinyTonnetz {
         }
 
         cells.push(
-          this.createCell(this.activeNotes, x, y, horizontalUnit, verticalUnit, semiToneCode)
+          this.createCell(cellStates, semiToneCode, x, y, horizontalUnit, verticalUnit)
         );
 
         if (col === -1 && row === -2) {
@@ -234,11 +236,11 @@ export class TinyTonnetz {
     />;
   }
 
-  private createCell(activeNotes: ActiveNotes, x: number, y: number, width: number, height: number, semiToneCode: SemiToneCode) {
+  private createCell(cellStates: any, semiToneCode: SemiToneCode, x: number, y: number, width: number, height: number) {
     return (
       <tiny-tonnetz-cell
         key={`${x}-${y}`}
-        activeNotes={activeNotes}
+        cellStates={cellStates}
         width={width}
         height={height}
         semiToneCode={semiToneCode}

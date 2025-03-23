@@ -1,7 +1,7 @@
 import { Input } from "webmidi";
 import { Components } from "../../../components";
 import TinyTonnetz = Components.TinyTonnetz;
-import { NoteStatus } from "../../models";
+import { NoteKey, NoteState } from "../../models";
 
 export class WebMidiTonnetzController {
 
@@ -17,26 +17,26 @@ export class WebMidiTonnetzController {
     this.webMidiInput = webMidiInput;
 
     this.webMidiInput.addListener("noteon", e => {
-      let notes = this.tonnetz.activeNotes?.[e.note.number % 12];
+      let notes: Array<NoteKey> = this.tonnetz.activeNotes?.[e.note.number % 12];
 
       if (!notes) {
         notes = [];
         this.tonnetz.activeNotes[e.note.number % 12] = notes;
       }
 
-      notes.push({ status: NoteStatus.PRESSED });
+      notes.push({ state: NoteState.PRESSED });
 
       this.tonnetz.activeNotes = { ...this.tonnetz.activeNotes }
     });
 
     this.webMidiInput.addListener("noteoff", e => {
-      let notes = this.tonnetz.activeNotes?.[e.note.number % 12];
+      let notes: Array<NoteKey> = this.tonnetz.activeNotes?.[e.note.number % 12];
 
       if (notes.length) {
         if (this.sustained) {
-          const note = notes.find(note => note.status === NoteStatus.PRESSED);
+          const note = notes.find(note => note.state === NoteState.PRESSED);
           if (note) {
-            note.status = NoteStatus.SUSTAINED;
+            note.state = NoteState.SUSTAINED;
           }
         } else {
           notes.shift();
@@ -52,8 +52,8 @@ export class WebMidiTonnetzController {
 
         if (!this.sustained && this.tonnetz.activeNotes) {
           for (let notesKey in this.tonnetz.activeNotes) {
-            let notes = this.tonnetz.activeNotes[notesKey];
-            this.tonnetz.activeNotes[notesKey] = notes.filter(note => note.status !== NoteStatus.SUSTAINED);
+            let notes: Array<NoteKey> = this.tonnetz.activeNotes[notesKey];
+            this.tonnetz.activeNotes[notesKey] = notes.filter(note => note.state !== NoteState.SUSTAINED);
           }
 
           this.tonnetz.activeNotes = { ...this.tonnetz.activeNotes }

@@ -1,5 +1,5 @@
 import { Component, h, Host, Prop } from '@stencil/core';
-import { ActiveNotes, NoteIntervals, NoteStatus, SemiToneCode } from "../../utils/models";
+import { NoteState, SemiToneCode } from "../../utils/models";
 import { isBlackKeyNote } from "../../utils/utils";
 
 const NOTE_NAMES = [
@@ -28,74 +28,10 @@ function getNoteNameFromSemiToneCode(semiToneCode: number): string {
 })
 export class TinyTonnetzCell {
 
-  @Prop() activeNotes?: ActiveNotes;
+  @Prop() cellStates?: any;
   @Prop() width: number;
   @Prop() height: number;
   @Prop() semiToneCode: SemiToneCode = 0;
-
-  isActive() {
-    return this.activeNotes?.[this.semiToneCode]?.length > 0;
-  }
-
-  isPressed() {
-    return this.getPressedNoteCount() > 0;
-  }
-
-  getPressedNoteCount() {
-    return this.activeNotes?.[this.semiToneCode]?.filter(note => note.status === NoteStatus.PRESSED)?.length || 0;
-  }
-
-  isMinorThirdIntervalActive() {
-    return this.isActive() && this.activeNotes?.[(this.semiToneCode + NoteIntervals.MINOR_THIRD) % 12]?.length > 0
-  }
-
-  isMinorThirdIntervalPressed() {
-    return this.isPressed()
-      && this.activeNotes?.[(this.semiToneCode + NoteIntervals.MINOR_THIRD) % 12]?.filter(note => note.status === NoteStatus.PRESSED)?.length
-  }
-
-  isMajorThirdIntervalActive() {
-    return this.isActive() && this.activeNotes?.[(this.semiToneCode + NoteIntervals.MAJOR_THIRD) % 12]?.length > 0
-  }
-
-  isMajorThirdIntervalPressed() {
-    return this.isPressed()
-      && this.activeNotes?.[(this.semiToneCode + NoteIntervals.MAJOR_THIRD) % 12]?.filter(note => note.status === NoteStatus.PRESSED)?.length
-  }
-
-  isPerfectFifthIntervalActive() {
-    return this.isActive() && this.activeNotes?.[(this.semiToneCode + NoteIntervals.PERFECT_FIFTH) % 12]?.length > 0
-  }
-
-  isPerfectFifthIntervalPressed() {
-    return this.isPressed()
-      && this.activeNotes?.[(this.semiToneCode + NoteIntervals.PERFECT_FIFTH) % 12]?.filter(note => note.status === NoteStatus.PRESSED)?.length
-
-  }
-
-  hasChordActive() {
-    return this.isMajorThirdIntervalActive() || this.isMinorThirdIntervalActive();
-  }
-
-
-  isMinorChordActive() {
-    return this.isMinorThirdIntervalActive() && this.isPerfectFifthIntervalActive();
-  }
-
-  isMajorChordActive() {
-    return this.isMajorThirdIntervalActive() && this.isPerfectFifthIntervalActive();
-  }
-
-  isChordRoot() {
-    return this.hasInterval()
-      && !this.activeNotes?.[(12 + this.semiToneCode - NoteIntervals.MINOR_THIRD) % 12]?.length
-      && !this.activeNotes?.[(12 + this.semiToneCode - NoteIntervals.MAJOR_THIRD) % 12]?.length
-      && !this.activeNotes?.[(12 + this.semiToneCode - NoteIntervals.PERFECT_FIFTH) % 12]?.length;
-  }
-
-  hasInterval() {
-    return this.isMinorThirdIntervalActive() || this.isMajorThirdIntervalActive() || this.isPerfectFifthIntervalActive();
-  }
 
   render() {
     return (
@@ -115,20 +51,20 @@ export class TinyTonnetzCell {
 
           <polygon
             points={`0,${this.height} ${this.width},0 ${this.width},${this.height}`}
-            class={{ 'cell_majorChord': true, '-active': this.isMajorChordActive()}}
+            class={{ 'cell_majorChord': true, '-active': this.cellStates[this.semiToneCode]?.isMajorChordActive}}
           />
 
           <polygon
             points={`0,0 0,${this.height} ${this.width},0`}
-            class={{ 'cell_minorChord': true, '-active': this.isMinorChordActive()}}
+            class={{ 'cell_minorChord': true, '-active': this.cellStates[this.semiToneCode]?.isMinorChordActive}}
           />
 
           <line
             x1={0} y1={this.height}
             x2={0} y2={0}
             class={{
-              '-active': this.isMinorThirdIntervalActive(),
-              '-pressed': this.isMinorThirdIntervalPressed()
+              '-active': this.cellStates[this.semiToneCode]?.isMinorThirdIntervalActive,
+              '-pressed': this.cellStates[this.semiToneCode]?.isMinorThirdIntervalPressed
           }}
           />
 
@@ -136,17 +72,17 @@ export class TinyTonnetzCell {
             x1={0} y1={this.height}
             x2={this.width} y2={this.height}
             class={{
-              '-active': this.isMajorThirdIntervalActive(),
-              '-pressed': this.isMajorThirdIntervalPressed()
+              '-active': this.cellStates[this.semiToneCode]?.isMajorThirdIntervalActive,
+              '-pressed': this.cellStates[this.semiToneCode]?.isMajorThirdIntervalPressed
           }}/>
 
           <line
             x1={0} y1={this.height}
             x2={this.width} y2={0}
             class={{
-              '-active': this.isPerfectFifthIntervalActive(),
-              '-pressed': this.isPerfectFifthIntervalPressed(),
-              '-chordActive': this.hasChordActive()
+              '-active': this.cellStates[this.semiToneCode]?.isPerfectFifthIntervalActive,
+              '-pressed': this.cellStates[this.semiToneCode]?.isPerfectFifthIntervalPressed,
+              '-chordActive': this.cellStates[this.semiToneCode]?.hasChordActive
           }}/>
         </svg>
 
@@ -154,17 +90,17 @@ export class TinyTonnetzCell {
           class={{
             cell_node: true,
             '-blackKey': isBlackKeyNote(this.semiToneCode),
-            '-active': this.isActive(),
-            '-chordRoot': this.isChordRoot(),
-            '-minorThird': this.isMinorThirdIntervalActive(),
-            '-majorThird': this.isMajorThirdIntervalActive(),
-            '-minorChord': this.isMinorChordActive(),
-            '-majorChord': this.isMajorChordActive(),
-            '-pressed': this.isPressed(),
-            '-completelyPressed': this.getPressedNoteCount() > 1
+            '-active': this.cellStates[this.semiToneCode]?.isActive,
+            '-chordRoot': this.cellStates[this.semiToneCode]?.isChordRoot,
+            '-minorThird': this.cellStates[this.semiToneCode]?.isMinorThirdIntervalActive,
+            '-majorThird': this.cellStates[this.semiToneCode]?.isMajorThirdIntervalActive,
+            '-minorChord': this.cellStates[this.semiToneCode]?.isMinorChordActive,
+            '-majorChord': this.cellStates[this.semiToneCode]?.isMajorChordActive,
+            '-pressed': this.cellStates[this.semiToneCode]?.state === NoteState.PRESSED,
+            '-completelyPressed': this.cellStates[this.semiToneCode]?.count > 1
           }}
           style={{
-            '--count': `${this.getPressedNoteCount() - 1}`
+            '--count': `${this.cellStates[this.semiToneCode]?.count - 1}`
           }}
           innerHTML={ getNoteNameFromSemiToneCode(this.semiToneCode) }
         />

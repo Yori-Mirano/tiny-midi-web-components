@@ -10,5 +10,5 @@
 
 
 export { WebMidiTonnetzController } from "./utils/tonnetz-controllers/web-midi/web-midi.tonnetz-controller";
-export { ActiveNotes, Note, SemiToneCode, NoteStatus } from "./utils/models";
+export { ActiveNotes, NoteKey, SemiToneCode, NoteState } from "./utils/models";
 export type * from './components.d.ts';

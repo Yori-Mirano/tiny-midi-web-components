@@ -10,13 +10,14 @@ export const SEMI_TONE_COUNT: SemiToneCode = 12
 
 export const BLACK_KEY_NOTES: Array<SemiToneCode> = [1, 3, 6, 8, 10];
 
-export type ActiveNotes = Partial<Record<SemiToneCode, Array<Note>>>;
+export type ActiveNotes = Partial<Record<SemiToneCode, Array<NoteKey>>>;
 
-export interface Note {
-  status?: NoteStatus;
+export interface NoteKey {
+  state?: NoteState;
 }
 
-export enum NoteStatus {
+export enum NoteState {
   PRESSED = 'PRESSED',
   SUSTAINED = 'SUSTAINED',
+  RELEASED = 'RELEASED',
 }
