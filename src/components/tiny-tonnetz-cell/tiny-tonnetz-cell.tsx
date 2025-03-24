@@ -30,6 +30,8 @@ export class TinyTonnetzCell {
   @Prop() height: number;
   @Prop() semiToneCode: SemiToneCode = 0;
   @Prop() noteNamingConvention: NoteNamingConventions = NoteNamingConventions.ENGLISH;
+  @Prop() isTracing: boolean = false;
+  @Prop() hasNoTransition: boolean = false;
 
   render() {
     return (
@@ -62,7 +64,9 @@ export class TinyTonnetzCell {
             x2={0} y2={0}
             class={{
               '-active': this.cellStates[this.semiToneCode]?.isMinorThirdIntervalActive,
-              '-pressed': this.cellStates[this.semiToneCode]?.isMinorThirdIntervalPressed
+              '-pressed': this.cellStates[this.semiToneCode]?.isMinorThirdIntervalPressed,
+              '-trace': this.isTracing,
+              '-noTransition': this.hasNoTransition
           }}
           />
 
@@ -71,7 +75,9 @@ export class TinyTonnetzCell {
             x2={this.width} y2={this.height}
             class={{
               '-active': this.cellStates[this.semiToneCode]?.isMajorThirdIntervalActive,
-              '-pressed': this.cellStates[this.semiToneCode]?.isMajorThirdIntervalPressed
+              '-pressed': this.cellStates[this.semiToneCode]?.isMajorThirdIntervalPressed,
+              '-trace': this.isTracing,
+              '-noTransition': this.hasNoTransition
           }}/>
 
           <line
@@ -80,7 +86,9 @@ export class TinyTonnetzCell {
             class={{
               '-active': this.cellStates[this.semiToneCode]?.isPerfectFifthIntervalActive,
               '-pressed': this.cellStates[this.semiToneCode]?.isPerfectFifthIntervalPressed,
-              '-chordActive': this.cellStates[this.semiToneCode]?.hasChordActive
+              '-chordActive': this.cellStates[this.semiToneCode]?.hasChordActive,
+              '-trace': this.isTracing,
+              '-noTransition': this.hasNoTransition
           }}/>
         </svg>
 
@@ -95,7 +103,9 @@ export class TinyTonnetzCell {
             '-minorChord': this.cellStates[this.semiToneCode]?.isMinorChordActive,
             '-majorChord': this.cellStates[this.semiToneCode]?.isMajorChordActive,
             '-pressed': this.cellStates[this.semiToneCode]?.state === NoteState.PRESSED,
-            '-completelyPressed': this.cellStates[this.semiToneCode]?.count > 1
+            '-completelyPressed': this.cellStates[this.semiToneCode]?.count > 1,
+            '-trace': this.isTracing,
+            '-noTransition': this.hasNoTransition
           }}
           style={{
             '--count': `${this.cellStates[this.semiToneCode]?.count - 1}`

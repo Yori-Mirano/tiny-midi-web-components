@@ -13,15 +13,18 @@ export namespace Components {
         "centralClusterMargin": number;
         "isDarkTheme": boolean;
         "isLightTheme": boolean;
-        "isScaleSliderVisible": boolean;
         "isScalingEnabled": boolean;
+        "isTracing": boolean;
+        "iscontrolsVisible": boolean;
         "noteNamingConvention": NoteNamingConventions;
         "noteNamingConventionOptions": Array<NoteNamingConventions>;
         "scale": number;
     }
     interface TinyTonnetzCell {
         "cellStates": any;
+        "hasNoTransition": boolean;
         "height": number;
+        "isTracing": boolean;
         "noteNamingConvention": NoteNamingConventions;
         "semiToneCode": SemiToneCode;
         "width": number;
@@ -51,15 +54,18 @@ declare namespace LocalJSX {
         "centralClusterMargin"?: number;
         "isDarkTheme"?: boolean;
         "isLightTheme"?: boolean;
-        "isScaleSliderVisible"?: boolean;
         "isScalingEnabled"?: boolean;
+        "isTracing"?: boolean;
+        "iscontrolsVisible"?: boolean;
         "noteNamingConvention"?: NoteNamingConventions;
         "noteNamingConventionOptions"?: Array<NoteNamingConventions>;
         "scale"?: number;
     }
     interface TinyTonnetzCell {
         "cellStates"?: any;
+        "hasNoTransition"?: boolean;
         "height"?: number;
+        "isTracing"?: boolean;
         "noteNamingConvention"?: NoteNamingConventions;
         "semiToneCode"?: SemiToneCode;
         "width"?: number;

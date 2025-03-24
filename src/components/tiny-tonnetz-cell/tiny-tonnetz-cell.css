@@ -13,6 +13,9 @@ tiny-tonnetz-cell {
   --tinyTonnetz_theme_link--active: light-dark(#333, #222);
   --tinyTonnetz_theme_link--pressed: light-dark(#000, #000);
 
+  --tinyTonnetz_trace_duration: 5s;
+  --tinyTonnetz_trace_timingFunction: cubic-bezier(0, 1.11, 1, 0.55);
+
   pointer-events: none;
 }
 
@@ -45,6 +48,15 @@ tiny-tonnetz-cell {
   transition-property: transform, box-shadow, background-color, color, border, outline-width, outline-color;
   transition-duration: 100ms;
 
+  &.-trace {
+    transition-duration: var(--tinyTonnetz_trace_duration);
+    transition-timing-function: var(--tinyTonnetz_trace_timingFunction);
+  }
+
+  &.-noTransition {
+    transition: none;
+  }
+
   height: 34px;
   aspect-ratio: 1;
 
@@ -73,6 +85,7 @@ tiny-tonnetz-cell {
     color: var(--tinyTonnetz_theme_cell_text--active);
     border-color: #000;
     outline-color: #0004;
+    transition-duration: 100ms;
 
     &.-blackKey {
       background: var(--tinyTonnetz_theme_cell_background--active-blackKey);
@@ -122,6 +135,15 @@ tiny-tonnetz-cell {
     transition-property: stroke, stroke-width, stroke-dasharray;
     transition-duration: 100ms;
 
+    &.-trace {
+      transition-duration: var(--tinyTonnetz_trace_duration);
+      transition-timing-function: var(--tinyTonnetz_trace_timingFunction);
+    }
+
+    &.-noTransition {
+      transition: none;
+    }
+
     &.perfectFifth {
       stroke-width: 4px;
     }
@@ -129,6 +151,7 @@ tiny-tonnetz-cell {
     &.-active {
       stroke-width: 12px;
       stroke: var(--tinyTonnetz_theme_link--active);
+      transition-duration: 100ms;
 
       &.-chordActive {
         stroke-width: 1px;

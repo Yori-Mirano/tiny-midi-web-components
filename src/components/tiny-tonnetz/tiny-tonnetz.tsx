@@ -29,17 +29,19 @@ export class TinyTonnetz {
 
   @Prop() activeNotes: ActiveNotes = {};
   @Prop() centralClusterMargin = 1;
-  @Prop({ attribute: 'scale-slider' }) isScaleSliderVisible: boolean = true;
+  @Prop({ attribute: 'controls' }) iscontrolsVisible: boolean = true;
   @Prop({ attribute: 'scaling' }) isScalingEnabled: boolean = true;
   @LocalStorage('id') @Prop({ mutable: true }) scale = 1;
   @LocalStorage('id') @Prop({ mutable: true, attribute: 'force-light-theme' }) isLightTheme: boolean = false;
   @LocalStorage('id') @Prop({ mutable: true, attribute: 'force-dark-theme' }) isDarkTheme: boolean =  false;
+  @LocalStorage('id') @Prop({ mutable: true, attribute: 'trace' }) isTracing: boolean = false;
   @LocalStorage('id') @Prop({ mutable: true }) noteNamingConvention: NoteNamingConventions = NoteNamingConventions.ENGLISH;
   @Prop() noteNamingConventionOptions: Array<NoteNamingConventions> = [
     NoteNamingConventions.ENGLISH,
     NoteNamingConventions.LATIN,
   ];
 
+  @State() private hasNoTransition: boolean = false;
   @State() private size: { width: number, height: number } = { width: 0, height: 0 };
 
   private minHorizontalCount: number;
@@ -251,6 +253,8 @@ export class TinyTonnetz {
         height={height}
         semiToneCode={semiToneCode}
         noteNamingConvention={this.noteNamingConvention}
+        isTracing={this.isTracing}
+        hasNoTransition={this.hasNoTransition}
         style={{
           position: 'absolute',
           translate: `${x}px ${y}px`,
@@ -271,61 +275,107 @@ export class TinyTonnetz {
           {this.generateGrid()}
         </div>
 
-        <div class="tinyTonnetz_controls">
-          <div class="tinyTonnetz_themeSwitcher">
-            {this.noteNamingConventionOptions.map(namingConvention => {
-              return (
-                <button
-                  class={{ '-active': this.noteNamingConvention === namingConvention }}
-                  onClick={() => { this.noteNamingConvention = namingConvention }}
-                >
-                  { NOTE_NAMES[namingConvention][0] }
-                </button>
-              );
-            })}
-          </div>
-
-          <div class="tinyTonnetz_themeSwitcher -icons">
-            <button
-              class={{'-active': this.isLightTheme && !this.isDarkTheme}}
-              onClick={() => { this.isLightTheme = true; this.isDarkTheme = false; }}
-            >
-              ☀
-            </button>
-
-            <button
-              class={{'-active': !this.isLightTheme && !this.isDarkTheme}}
-              onClick={() => { this.isLightTheme = false; this.isDarkTheme = false; }}
-            >
-              ⇅
-            </button>
-            <button
-              class={{'-active': !this.isLightTheme && this.isDarkTheme}}
-              onClick={() => { this.isLightTheme = false; this.isDarkTheme = true; }}
-            >
-              🟆
-            </button>
-          </div>
-
-          { (this.isScaleSliderVisible && this.isScalingEnabled) ?
-            <div>
-              <input
-                class="tinyTonnetz_scaleSlider"
-                type="range" min={TinyTonnetz.SCALE_MIN} max={TinyTonnetz.SCALE_MAX} step="any" list="markers"
-                value={this.scale}
-                onInput={event => this.scale = parseFloat((event.target as HTMLInputElement).value)}
-              />
-
-              <datalist id="markers">
-                <option value={TinyTonnetz.SCALE_MIN} label='-'></option>
-                <option value="1" label='1'></option>
-                <option value={TinyTonnetz.SCALE_MAX} label='+'></option>
-              </datalist>
+        {this.iscontrolsVisible ?
+          <div class="tinyTonnetz_controls">
+            <div class="tinyTonnetz_themeSwitcher">
+              {this.noteNamingConventionOptions.map(namingConvention => {
+                return (
+                  <button
+                    class={{'-active': this.noteNamingConvention === namingConvention}}
+                    onClick={() => {
+                      this.noteNamingConvention = namingConvention
+                    }}
+                  >
+                    {NOTE_NAMES[namingConvention][0]}
+                  </button>
+                );
+              })}
             </div>
-          :
-            null
-          }
-        </div>
+
+            <div class="tinyTonnetz_themeSwitcher">
+              <button
+                class={{'-active': !this.isTracing}}
+                onClick={() => {
+                  this.isTracing = false
+                }}
+              >
+                0s
+              </button>
+              <button
+                class={{'-active': this.isTracing}}
+                onClick={() => {
+                  this.isTracing = true
+                }}
+              >
+                5s
+              </button>
+            </div>
+
+            <div class="tinyTonnetz_themeSwitcher -icons">
+              <button
+                class={{'-active': this.isLightTheme && !this.isDarkTheme}}
+                onClick={() => {
+                  this.hasNoTransition = true;
+                  this.isLightTheme = true;
+                  this.isDarkTheme = false;
+                  requestAnimationFrame(() => {
+                    this.hasNoTransition = false;
+                  });
+                }}
+              >
+                ☀
+              </button>
+
+              <button
+                class={{'-active': !this.isLightTheme && !this.isDarkTheme}}
+                onClick={() => {
+                  this.hasNoTransition = true;
+                  this.isLightTheme = false;
+                  this.isDarkTheme = false;
+                  requestAnimationFrame(() => {
+                    this.hasNoTransition = false;
+                  });
+                }}
+              >
+                ⇅
+              </button>
+              <button
+                class={{'-active': !this.isLightTheme && this.isDarkTheme}}
+                onClick={() => {
+                  this.hasNoTransition = true;
+                  this.isLightTheme = false;
+                  this.isDarkTheme = true;
+                  requestAnimationFrame(() => {
+                    this.hasNoTransition = false;
+                  });
+                }}
+              >
+                ★
+              </button>
+            </div>
+
+            {this.isScalingEnabled ?
+              <div>
+                <input
+                  class="tinyTonnetz_scaleSlider"
+                  type="range" min={TinyTonnetz.SCALE_MIN} max={TinyTonnetz.SCALE_MAX} step="any" list="markers"
+                  value={this.scale}
+                  onInput={event => this.scale = parseFloat((event.target as HTMLInputElement).value)}
+                />
+
+                <datalist id="markers">
+                  <option value={TinyTonnetz.SCALE_MIN} label='-'></option>
+                  <option value="1" label='1'></option>
+                  <option value={TinyTonnetz.SCALE_MAX} label='+'></option>
+                </datalist>
+              </div>
+              :
+              null
+            }
+          </div>
+        :
+          null
+        }
       </Host>
     );
   }
