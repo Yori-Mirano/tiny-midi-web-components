@@ -1,5 +1,12 @@
 import { Component, Element, h, Host, Listen, Prop, State, Watch } from '@stencil/core';
-import { ActiveNotes, NoteIntervals, NoteNamingConventions, SEMI_TONE_COUNT, SemiToneCode } from "../../utils/models";
+import {
+  ActiveNotes,
+  NoteIntervals,
+  NoteNamingConventions,
+  SEMI_TONE_COUNT,
+  SemiToneCode, TonnetzCellState,
+  TonnetzCellStates
+} from "../../utils/models";
 import { Components } from "../../components";
 import { LocalStorage } from "../../utils/decorators/local-storage.decorator";
 import { getComputedTonnetzCellStates } from "../../utils/get-computed-cell-states.function";
@@ -27,7 +34,7 @@ export class TinyTonnetz {
 
   get id() { return this.el.id; }
 
-  @Prop() activeNotes: ActiveNotes = {};
+  @Prop({ mutable: true }) activeNotes: ActiveNotes = {};
   @Prop() centralClusterMargin = 1;
   @Prop({ attribute: 'controls' }) iscontrolsVisible: boolean = true;
   @Prop({ attribute: 'scaling' }) isScalingEnabled: boolean = true;
@@ -35,6 +42,7 @@ export class TinyTonnetz {
   @LocalStorage('id') @Prop({ mutable: true, attribute: 'force-light-theme' }) isLightTheme: boolean = false;
   @LocalStorage('id') @Prop({ mutable: true, attribute: 'force-dark-theme' }) isDarkTheme: boolean =  false;
   @LocalStorage('id') @Prop({ mutable: true, attribute: 'trace' }) isTracing: boolean = false;
+  @LocalStorage('id') @Prop({ mutable: true, attribute: 'trace-played-notes' }) isTracingPlayedNote: boolean = false;
   @LocalStorage('id') @Prop({ mutable: true }) noteNamingConvention: NoteNamingConventions = NoteNamingConventions.ENGLISH;
   @Prop() noteNamingConventionOptions: Array<NoteNamingConventions> = [
     NoteNamingConventions.ENGLISH,
@@ -47,6 +55,7 @@ export class TinyTonnetz {
   private minHorizontalCount: number;
   private minVerticalCount: number;
   private resizeObserver: ResizeObserver;
+  private cellStates: TonnetzCellStates = {};
 
   @Watch('scale')
   private clampScale(newValue: number) {
@@ -163,7 +172,20 @@ export class TinyTonnetz {
     const rowEnd = halfNumRows + (isEvenNumRows ? 0 : 1);
     const colEnd = halfNumCols + (isEvenNumCols ? 0 : 1);
 
-    const cellStates = getComputedTonnetzCellStates(this.activeNotes);
+    const previousCellStates = this.cellStates;
+    this.cellStates = getComputedTonnetzCellStates(this.activeNotes);
+
+    if (this.isTracingPlayedNote) {
+      Object.entries(previousCellStates).forEach(([semiToneCode, cellState]) => {
+        if (this.cellStates[semiToneCode]?.isActive || cellState.isActive || cellState.wasPlayed) {
+          if (!this.cellStates[semiToneCode]) {
+            this.cellStates[semiToneCode] = {} as TonnetzCellState;
+          }
+
+          this.cellStates[semiToneCode].wasPlayed = true;
+        }
+      });
+    }
 
     for (let row = rowStart; row < rowEnd; row++) {
       for (let col = colStart; col < colEnd; col++) {
@@ -193,7 +215,7 @@ export class TinyTonnetz {
         }
 
         cells.push(
-          this.createCell(cellStates, semiToneCode, x, y, horizontalUnit, verticalUnit)
+          this.createCell(this.cellStates, semiToneCode, x, y, horizontalUnit, verticalUnit)
         );
 
         if (col === -1 && row === -2) {
@@ -275,9 +297,9 @@ export class TinyTonnetz {
           {this.generateGrid()}
         </div>
 
-        {this.iscontrolsVisible ?
-          <div class="tinyTonnetz_controls">
-            <div class="tinyTonnetz_themeSwitcher">
+        { this.iscontrolsVisible ? <div>
+          <div class="tinyTonnetz_controls -right">
+            <div class="tinyTonnetz_controls_switcher" title="Note naming convention">
               {this.noteNamingConventionOptions.map(namingConvention => {
                 return (
                   <button
@@ -292,26 +314,7 @@ export class TinyTonnetz {
               })}
             </div>
 
-            <div class="tinyTonnetz_themeSwitcher">
-              <button
-                class={{'-active': !this.isTracing}}
-                onClick={() => {
-                  this.isTracing = false
-                }}
-              >
-                0s
-              </button>
-              <button
-                class={{'-active': this.isTracing}}
-                onClick={() => {
-                  this.isTracing = true
-                }}
-              >
-                1s
-              </button>
-            </div>
-
-            <div class="tinyTonnetz_themeSwitcher -icons">
+            <div class="tinyTonnetz_controls_switcher -icons" title="Theme switcher">
               <button
                 class={{'-active': this.isLightTheme && !this.isDarkTheme}}
                 onClick={() => {
@@ -357,7 +360,8 @@ export class TinyTonnetz {
             {this.isScalingEnabled ?
               <div>
                 <input
-                  class="tinyTonnetz_scaleSlider"
+                  class="tinyTonnetz_controls_scaleSlider"
+                  title="Scale"
                   type="range" min={TinyTonnetz.SCALE_MIN} max={TinyTonnetz.SCALE_MAX} step="any" list="markers"
                   value={this.scale}
                   onInput={event => this.scale = parseFloat((event.target as HTMLInputElement).value)}
@@ -369,13 +373,67 @@ export class TinyTonnetz {
                   <option value={TinyTonnetz.SCALE_MAX} label='+'></option>
                 </datalist>
               </div>
-              :
-              null
-            }
+              : null}
+
           </div>
-        :
-          null
-        }
+
+          <div class="tinyTonnetz_controls">
+            <div class="tinyTonnetz_controls_switcher" title="Afterglow">
+              <button
+                class={{'-active': this.isTracing}}
+                onClick={() => {
+                  this.isTracing = true
+                }}
+              >
+                1s
+              </button>
+              <button
+                class={{'-active': !this.isTracing}}
+                onClick={() => {
+                  this.isTracing = false
+                }}
+              >
+                0s
+              </button>
+            </div>
+
+
+            <div class="tinyTonnetz_controls_switcher -icons" title="Mark played notes">
+              {this.isTracingPlayedNote ?
+                <button
+                  onClick={() => {
+                    this.activeNotes = {};
+                    this.cellStates = {};
+                  }}
+                  disabled={Object.keys(this.cellStates).length === 0}
+                >
+                  ↺
+                </button>
+                :
+
+                <button
+                  class={{'-active': this.isTracingPlayedNote}}
+                  onClick={() => {
+                    this.isTracingPlayedNote = true
+                  }}
+                >
+                  on
+                </button>
+              }
+              <button
+                class={{'-active': !this.isTracingPlayedNote}}
+                onClick={() => {
+                  this.isTracingPlayedNote = false;
+                  this.activeNotes = {};
+                  this.cellStates = {};
+                }}
+              >
+                off
+              </button>
+            </div>
+
+          </div>
+        </div> : null }
       </Host>
     );
   }

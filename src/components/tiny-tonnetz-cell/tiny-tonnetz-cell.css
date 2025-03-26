@@ -75,7 +75,8 @@ tiny-tonnetz-cell {
     align-self: flex-end;
   }
 
-  &.-active {
+  &.-active,
+  &.-wasPlayed {
     --level: 2px;
     box-shadow:
       0 var(--level) calc(var(--level)) #0002,
@@ -93,7 +94,7 @@ tiny-tonnetz-cell {
     }
 
     &:not(.-pressed) { --level: 6px }
-    &.-completelyPressed { --level: 0px }
+    &.-completelyPressed, &.-wasPlayed { --level: 0px }
   }
 
   &.-chordRoot {

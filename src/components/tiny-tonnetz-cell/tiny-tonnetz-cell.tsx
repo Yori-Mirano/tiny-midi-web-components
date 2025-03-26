@@ -97,6 +97,7 @@ export class TinyTonnetzCell {
             cell_node: true,
             '-blackKey': isBlackKeyNote(this.semiToneCode),
             '-active': this.cellStates[this.semiToneCode]?.isActive,
+            '-wasPlayed': !this.cellStates[this.semiToneCode]?.isActive && this.cellStates[this.semiToneCode]?.wasPlayed,
             '-chordRoot': this.cellStates[this.semiToneCode]?.isChordRoot,
             '-minorThird': this.cellStates[this.semiToneCode]?.isMinorThirdIntervalActive,
             '-majorThird': this.cellStates[this.semiToneCode]?.isMajorThirdIntervalActive,

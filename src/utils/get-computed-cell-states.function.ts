@@ -9,6 +9,7 @@ export function getComputedTonnetzCellStates(activeNotes: ActiveNotes): TonnetzC
 
     cellStates[semiToneCode] = {
       isActive: isNoteActive(activeNote),
+      wasPlayed: false,
 
       state: getNoteState(activeNote),
       count: getPressedNoteCount(activeNote),

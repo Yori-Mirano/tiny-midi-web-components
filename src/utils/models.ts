@@ -31,6 +31,7 @@ export type TonnetzCellStates = Partial<Record<SemiToneCode, TonnetzCellState>>;
 
 export interface TonnetzCellState {
   isActive: boolean;
+  wasPlayed: boolean;
   state: NoteState;
   count: number;
   hasChordActive: boolean;
