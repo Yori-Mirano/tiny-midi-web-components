@@ -2,7 +2,7 @@ import { Component, Element, h, Host, Listen, Prop, State, Watch } from '@stenci
 import { ActiveNotes, NoteIntervals, NoteNamingConventions, SEMI_TONE_COUNT, SemiToneCode } from "../../utils/models";
 import { Components } from "../../components";
 import { LocalStorage } from "../../utils/decorators/local-storage.decorator";
-import { getComputeCellStates } from "../../utils/get-compute-cell-states.function";
+import { getComputedTonnetzCellStates } from "../../utils/get-computed-cell-states.function";
 import { NOTE_NAMES } from "../../utils/note-names";
 import TinyTonnetzCell = Components.TinyTonnetzCell;
 
@@ -163,7 +163,7 @@ export class TinyTonnetz {
     const rowEnd = halfNumRows + (isEvenNumRows ? 0 : 1);
     const colEnd = halfNumCols + (isEvenNumCols ? 0 : 1);
 
-    const cellStates = getComputeCellStates(this.activeNotes);
+    const cellStates = getComputedTonnetzCellStates(this.activeNotes);
 
     for (let row = rowStart; row < rowEnd; row++) {
       for (let col = colStart; col < colEnd; col++) {
@@ -307,7 +307,7 @@ export class TinyTonnetz {
                   this.isTracing = true
                 }}
               >
-                5s
+                1s
               </button>
             </div>
 

@@ -13,7 +13,7 @@ tiny-tonnetz-cell {
   --tinyTonnetz_theme_link--active: light-dark(#333, #222);
   --tinyTonnetz_theme_link--pressed: light-dark(#000, #000);
 
-  --tinyTonnetz_trace_duration: 5s;
+  --tinyTonnetz_trace_duration: 1s;
   --tinyTonnetz_trace_timingFunction: cubic-bezier(0, 1.11, 1, 0.55);
 
   pointer-events: none;
@@ -154,8 +154,8 @@ tiny-tonnetz-cell {
       transition-duration: 100ms;
 
       &.-chordActive {
-        stroke-width: 1px;
-        stroke-dasharray: 16, 6;
+        stroke-width: 2px;
+        /*stroke-dasharray: 16, 6;*/
       }
     }
 
@@ -170,7 +170,7 @@ tiny-tonnetz-cell {
 .cell_majorGradient {
   stop {
     &:first-child { stop-opacity: .5 }
-    &:last-child { stop-opacity: 0 }
+    &:last-child { stop-opacity: .1 }
   }
 }
 

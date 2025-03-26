@@ -26,3 +26,21 @@ export enum NoteState {
   SUSTAINED = 'SUSTAINED',
   RELEASED = 'RELEASED',
 }
+
+export type TonnetzCellStates = Partial<Record<SemiToneCode, TonnetzCellState>>;
+
+export interface TonnetzCellState {
+  isActive: boolean;
+  state: NoteState;
+  count: number;
+  hasChordActive: boolean;
+  isChordRoot: boolean;
+  isMinorChordActive: boolean;
+  isMajorChordActive: boolean;
+  isPerfectFifthIntervalActive: boolean;
+  isPerfectFifthIntervalPressed: boolean;
+  isMajorThirdIntervalActive: boolean;
+  isMajorThirdIntervalPressed: boolean;
+  isMinorThirdIntervalActive: boolean;
+  isMinorThirdIntervalPressed: boolean;
+}

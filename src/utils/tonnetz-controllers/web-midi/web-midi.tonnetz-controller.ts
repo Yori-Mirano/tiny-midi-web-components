@@ -1,7 +1,7 @@
 import { Input } from "webmidi";
 import { Components } from "../../../components";
 import TinyTonnetz = Components.TinyTonnetz;
-import { NoteKey, NoteState } from "../../models";
+import { NoteKey, NoteState, SEMI_TONE_COUNT } from "../../models";
 
 export class WebMidiTonnetzController {
 
@@ -17,11 +17,11 @@ export class WebMidiTonnetzController {
     this.webMidiInput = webMidiInput;
 
     this.webMidiInput.addListener("noteon", e => {
-      let notes: Array<NoteKey> = this.tonnetz.activeNotes?.[e.note.number % 12];
+      let notes: Array<NoteKey> = this.tonnetz.activeNotes?.[e.note.number % SEMI_TONE_COUNT];
 
       if (!notes) {
         notes = [];
-        this.tonnetz.activeNotes[e.note.number % 12] = notes;
+        this.tonnetz.activeNotes[e.note.number % SEMI_TONE_COUNT] = notes;
       }
 
       notes.push({ state: NoteState.PRESSED });
@@ -30,7 +30,7 @@ export class WebMidiTonnetzController {
     });
 
     this.webMidiInput.addListener("noteoff", e => {
-      let notes: Array<NoteKey> = this.tonnetz.activeNotes?.[e.note.number % 12];
+      let notes: Array<NoteKey> = this.tonnetz.activeNotes?.[e.note.number % SEMI_TONE_COUNT];
 
       if (notes.length) {
         if (this.sustained) {

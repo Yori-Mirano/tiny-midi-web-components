@@ -1,8 +1,8 @@
-import { ActiveNotes, NoteIntervals, NoteKey, NoteState, SEMI_TONE_COUNT, SemiToneCode } from "./models";
+import { ActiveNotes, TonnetzCellStates, NoteIntervals, NoteKey, NoteState, SEMI_TONE_COUNT, SemiToneCode } from "./models";
 
 
-export function getComputeCellStates(activeNotes: ActiveNotes) {
-  const cellStates = {};
+export function getComputedTonnetzCellStates(activeNotes: ActiveNotes): TonnetzCellStates {
+  const cellStates: TonnetzCellStates = {};
 
   Object.entries(activeNotes).forEach(([semiToneCodeKey, activeNote]) => {
     const semiToneCode = Number(semiToneCodeKey) as SemiToneCode;
