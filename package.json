@@ -1,6 +1,6 @@
 {
   "name": "tiny-midi-web-components",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "description": "A set of web components made to interact with midi devices",
   "author": "Yori Mirano <yori.mirano@gmail.com>",
   "main": "dist/index.cjs.js",
