@@ -12,6 +12,7 @@ import { LocalStorage } from "../../utils/decorators/local-storage.decorator";
 import { getComputedTonnetzCellStates } from "../../utils/get-computed-cell-states.function";
 import { NOTE_NAMES } from "../../utils/note-names";
 import TinyTonnetzCell = Components.TinyTonnetzCell;
+import { version as tinyMidiWebComponentsVersion } from '../../../package.json';
 
 @Component({
   tag: 'tiny-tonnetz',
@@ -37,6 +38,7 @@ export class TinyTonnetz {
   @Prop({ mutable: true }) activeNotes: ActiveNotes = {};
   @Prop() centralClusterMargin = 1;
   @Prop({ attribute: 'controls' }) iscontrolsVisible: boolean = true;
+  @Prop({ attribute: 'version' }) isVersionVisible: boolean = false;
   @Prop({ attribute: 'scaling' }) isScalingEnabled: boolean = true;
   @LocalStorage('id') @Prop({ mutable: true }) scale = 1;
   @LocalStorage('id') @Prop({ mutable: true, attribute: 'force-light-theme' }) isLightTheme: boolean = false;
@@ -292,12 +294,12 @@ export class TinyTonnetz {
     }
 
     return (
-      <Host style={{ colorScheme: this.isLightTheme ? 'light' : (this.isDarkTheme ? 'dark': 'light dark')}}>
+      <Host style={{colorScheme: this.isLightTheme ? 'light' : (this.isDarkTheme ? 'dark' : 'light dark')}}>
         <div class="tinyTonnetz_anchor">
           {this.generateGrid()}
         </div>
 
-        { this.iscontrolsVisible ? <div>
+        {this.iscontrolsVisible ? <div>
           <div class="tinyTonnetz_controls -right">
             <div class="tinyTonnetz_controls_switcher" title="Note naming convention">
               {this.noteNamingConventionOptions.map(namingConvention => {
@@ -431,9 +433,14 @@ export class TinyTonnetz {
                 off
               </button>
             </div>
-
           </div>
-        </div> : null }
+        </div> : null}
+
+        { this.isVersionVisible ?
+          <div class="tinyWebMidiComponents_version">
+            version {tinyMidiWebComponentsVersion}
+          </div>
+        : null }
       </Host>
     );
   }

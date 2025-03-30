@@ -16,6 +16,7 @@ export namespace Components {
         "isScalingEnabled": boolean;
         "isTracing": boolean;
         "isTracingPlayedNote": boolean;
+        "isVersionVisible": boolean;
         "iscontrolsVisible": boolean;
         "noteNamingConvention": NoteNamingConventions;
         "noteNamingConventionOptions": Array<NoteNamingConventions>;
@@ -58,6 +59,7 @@ declare namespace LocalJSX {
         "isScalingEnabled"?: boolean;
         "isTracing"?: boolean;
         "isTracingPlayedNote"?: boolean;
+        "isVersionVisible"?: boolean;
         "iscontrolsVisible"?: boolean;
         "noteNamingConvention"?: NoteNamingConventions;
         "noteNamingConventionOptions"?: Array<NoteNamingConventions>;
