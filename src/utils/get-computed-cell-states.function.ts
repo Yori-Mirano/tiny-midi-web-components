@@ -30,6 +30,7 @@ export function getComputedTonnetzCellStates(activeNotes: ActiveNotes): TonnetzC
       isMinorThirdIntervalPressed: isMinorThirdIntervalPressed(activeNotes, semiToneCode),
 
       is7ofMinorMaj7Chord: is7ofMinorMaj7Chord(activeNotes, semiToneCode),
+      is9ofMAjorFlat9Chord: is9ofMAjorFlat9Chord(activeNotes, semiToneCode),
     }
   });
 
@@ -111,4 +112,15 @@ function is7ofMinorMaj7Chord(activeNotes: ActiveNotes, semiToneCode: SemiToneCod
     && activeNotes?.[(semiToneCode - NoteIntervals.MAJOR_THIRD + SEMI_TONE_COUNT) % SEMI_TONE_COUNT]?.length > 0
     && activeNotes?.[(semiToneCode + 1) % SEMI_TONE_COUNT]?.length > 0
     && !(activeNotes?.[(semiToneCode - NoteIntervals.MINOR_THIRD + SEMI_TONE_COUNT) % SEMI_TONE_COUNT]?.length > 0) // prevent some false positive
+    && !(activeNotes?.[(semiToneCode + NoteIntervals.PERFECT_FIFTH) % SEMI_TONE_COUNT]?.length > 0) // prevent some false positive
+}
+
+function is9ofMAjorFlat9Chord(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
+  return isNoteActive(activeNotes[semiToneCode])
+    && activeNotes?.[(semiToneCode + NoteIntervals.MINOR_THIRD) % SEMI_TONE_COUNT]?.length > 0
+    && activeNotes?.[(semiToneCode + NoteIntervals.MINOR_THIRD * 2) % SEMI_TONE_COUNT]?.length > 0
+    && activeNotes?.[(semiToneCode - NoteIntervals.MINOR_THIRD + SEMI_TONE_COUNT) % SEMI_TONE_COUNT]?.length > 0
+    && activeNotes?.[(semiToneCode - 1 + SEMI_TONE_COUNT) % SEMI_TONE_COUNT]?.length > 0
+    && !(activeNotes?.[(semiToneCode - NoteIntervals.MAJOR_THIRD + SEMI_TONE_COUNT) % SEMI_TONE_COUNT]?.length > 0) // prevent some false positive
+    && !(activeNotes?.[(semiToneCode + NoteIntervals.PERFECT_FIFTH) % SEMI_TONE_COUNT]?.length > 0) // prevent some false positive
 }
