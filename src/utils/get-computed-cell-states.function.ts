@@ -1,7 +1,7 @@
 import { ActiveNotes, TonnetzCellStates, NoteIntervals, NoteKey, NoteState, SEMI_TONE_COUNT, SemiToneCode } from "./models";
 
 
-export function getComputedTonnetzCellStates(activeNotes: ActiveNotes): TonnetzCellStates {
+export function getComputedTonnetzCellStates(activeNotes: ActiveNotes, bassNote?: SemiToneCode): TonnetzCellStates {
   const cellStates: TonnetzCellStates = {};
 
   Object.entries(activeNotes).forEach(([semiToneCodeKey, activeNote]) => {
@@ -13,6 +13,8 @@ export function getComputedTonnetzCellStates(activeNotes: ActiveNotes): TonnetzC
 
       state: getNoteState(activeNote),
       count: getPressedNoteCount(activeNote),
+
+      isBass: bassNote === semiToneCode,
 
       hasChordActive: hasChordActive(activeNotes, semiToneCode),
       isChordRoot: isChordRoot(activeNotes, semiToneCode),

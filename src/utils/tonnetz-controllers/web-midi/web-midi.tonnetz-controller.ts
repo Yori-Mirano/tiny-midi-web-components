@@ -1,5 +1,5 @@
 import { ControlChangeMessageEvent, Input, NoteMessageEvent } from "webmidi";
-import { Components } from "../../../components";
+import { Components, SemiToneCode } from '../../../components';
 import TinyTonnetz = Components.TinyTonnetz;
 import { NoteKey, NoteState, SEMI_TONE_COUNT } from "../../models";
 
@@ -8,6 +8,9 @@ export class WebMidiTonnetzController {
   sustainThreshold = 43; // from 0 to 127
 
   sustained = false;
+
+  pressedKeyNotes: Array<number> = []; // For bassnote computing
+  sustainedKeyNotes: Array<number> = []; // For bassnote computing
 
   constructor(public tonnetz: TinyTonnetz) {}
 
@@ -33,6 +36,9 @@ export class WebMidiTonnetzController {
 
     notes.push({ state: NoteState.PRESSED });
 
+    this.registerPressedNote(event.note.number); // For bassnote computing
+    this.updateBassNote();
+
     this.tonnetz.activeNotes = { ...this.tonnetz.activeNotes }
   }
 
@@ -45,9 +51,14 @@ export class WebMidiTonnetzController {
         if (note) {
           note.state = NoteState.SUSTAINED;
         }
+
+        this.registerSustainedNote(event.note.number);
       } else {
         notes.shift();
+        this.unregisterPressedNote(event.note.number); // For bassnote computing
       }
+
+      this.updateBassNote();
 
       this.tonnetz.activeNotes = { ...this.tonnetz.activeNotes }
     }
@@ -65,6 +76,32 @@ export class WebMidiTonnetzController {
 
         this.tonnetz.activeNotes = { ...this.tonnetz.activeNotes }
       }
+
+      this.releaseSustainedNote();
+      this.updateBassNote();
     }
+  }
+
+  registerPressedNote(noteCode: number) {
+    this.pressedKeyNotes.push(noteCode);
+    this.pressedKeyNotes.sort((a, b) => a - b);
+  }
+
+  unregisterPressedNote(noteCode: number) {
+    this.pressedKeyNotes = this.pressedKeyNotes.filter(value => value !== noteCode);
+  }
+
+  registerSustainedNote(noteCode: number) {
+    this.sustainedKeyNotes.push(noteCode);
+  }
+
+  releaseSustainedNote() {
+    this.pressedKeyNotes = this.pressedKeyNotes.filter(value => !this.sustainedKeyNotes.includes(value));
+    this.sustainedKeyNotes = [];
+  }
+
+  updateBassNote() {
+    this.tonnetz.bassNote = (this.pressedKeyNotes[0] % SEMI_TONE_COUNT) as SemiToneCode;
+    console.log(this.tonnetz.bassNote)
   }
 }

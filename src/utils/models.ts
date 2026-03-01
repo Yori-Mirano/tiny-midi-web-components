@@ -34,6 +34,7 @@ export interface TonnetzCellState {
   wasPlayed: boolean;
   state: NoteState;
   count: number;
+  isBass: boolean;
   hasChordActive: boolean;
   isChordRoot: boolean;
   isMinorChordActive: boolean;

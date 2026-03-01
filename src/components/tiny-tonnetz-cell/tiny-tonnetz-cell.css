@@ -13,6 +13,8 @@ tiny-tonnetz-cell {
   --tinyTonnetz_theme_link--active: light-dark(#333, #222);
   --tinyTonnetz_theme_link--pressed: light-dark(#000, #000);
 
+  --tinyTonnetz_theme_bassnote_marker: light-dark(#000, #fff7);
+
   --tinyTonnetz_trace_duration: 1s;
   --tinyTonnetz_trace_timingFunction: cubic-bezier(0, 1.11, 1, 0.55);
 
@@ -25,7 +27,6 @@ tiny-tonnetz-cell {
   --count: 0;
 
   pointer-events: initial;
-  overflow: hidden;
   position: absolute;
   top: 0;
   left: 0;
@@ -122,6 +123,48 @@ tiny-tonnetz-cell {
       }
     }
   }
+
+  &::before,
+  &::after {
+    opacity: 0;
+    display: block;
+    position: absolute;
+    content: "";
+    transition-property: transform, opacity;
+    transition-duration: 100ms;
+  }
+
+  &::before {
+    content: "bass";
+    color: var(--tinyTonnetz_theme_bassnote_marker);
+    font-size: 10px;
+    right: -28px;
+    bottom: -22px;
+    transform: translate(25%, 25%) rotate(-45deg);
+  }
+
+  &::after {
+    right: -20px;
+    bottom: -20px;
+    transform: translate(25%, 25%);
+    border-top: 15px solid var(--tinyTonnetz_theme_bassnote_marker);
+    border-right: 15px solid transparent;
+  }
+
+  &.-bass::before,
+  &.-bass::after {
+    opacity: 1;
+  }
+
+  &.-bass::before {
+    opacity: 1;
+    transform: translate(0) rotate(-45deg);
+  }
+
+  &.-bass::after {
+    opacity: 1;
+    transform: translate(0);
+  }
 }
 
 .cell_background {
@@ -149,14 +192,14 @@ tiny-tonnetz-cell {
       stroke-width: 4px;
     }
 
-    &:not(.-is7ofMinorMaj7Chord):not(.-is9ofMAjorFlat9Chord) {
+    &:not(.-chordActive):not(.-is7ofMinorMaj7Chord):not(.-is9ofMAjorFlat9Chord) {
       &.-active {
         stroke-width: 12px;
         stroke: var(--tinyTonnetz_theme_link--active);
         transition-duration: 100ms;
 
         &.-chordActive {
-          stroke-width: 2px;
+          /*stroke-width: 2px;*/
           /*stroke-dasharray: 16, 6;*/
         }
       }
@@ -173,7 +216,7 @@ tiny-tonnetz-cell {
 .cell_majorGradient {
   stop {
     &:first-child { stop-opacity: .5 }
-    &:last-child { stop-opacity: .1 }
+    &:last-child { stop-opacity: 0 }
   }
 }
 

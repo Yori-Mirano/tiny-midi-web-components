@@ -110,6 +110,7 @@ export class TinyTonnetzCell {
             '-majorChord': this.cellStates[this.semiToneCode]?.isMajorChordActive,
             '-pressed': this.cellStates[this.semiToneCode]?.state === NoteState.PRESSED,
             '-completelyPressed': this.cellStates[this.semiToneCode]?.count > 1,
+            '-bass': this.cellStates[this.semiToneCode]?.isBass,
             '-trace': this.isTracing,
             '-noTransition': this.hasNoTransition
           }}

@@ -36,6 +36,7 @@ export class TinyTonnetz {
   get id() { return this.el.id; }
 
   @Prop({ mutable: true }) activeNotes: ActiveNotes = {};
+  @Prop({ mutable: true }) bassNote?: SemiToneCode;
   @Prop() centralClusterMargin = 1;
   @Prop({ attribute: 'controls' }) iscontrolsVisible: boolean = true;
   @Prop({ attribute: 'version' }) isVersionVisible: boolean = false;
@@ -175,7 +176,7 @@ export class TinyTonnetz {
     const colEnd = halfNumCols + (isEvenNumCols ? 0 : 1);
 
     const previousCellStates = this.cellStates;
-    this.cellStates = getComputedTonnetzCellStates(this.activeNotes);
+    this.cellStates = getComputedTonnetzCellStates(this.activeNotes, this.bassNote);
 
     if (this.isTracingPlayedNote) {
       Object.entries(previousCellStates).forEach(([semiToneCode, cellState]) => {
@@ -225,7 +226,7 @@ export class TinyTonnetz {
             <div class="tinyTonnetz_legend" style={{ translate:`${x}px ${y}px` }}>
               <div class="tinyTonnetz_legend_minorThird">3 ►</div>
               <div class="tinyTonnetz_legend_majorThird">4 semitones ►</div>
-              <div class="tinyTonnetz_legend_perfectFifth">◄ 5</div>
+              <div class="tinyTonnetz_legend_perfectFifth">◀ 5</div>
             </div>
           );
         }
