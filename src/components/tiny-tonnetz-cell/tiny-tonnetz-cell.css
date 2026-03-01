@@ -13,6 +13,10 @@ tiny-tonnetz-cell {
   --tinyTonnetz_theme_link--active: light-dark(#333, #222);
   --tinyTonnetz_theme_link--pressed: light-dark(#000, #000);
 
+  --tinyTonnetz_theme_guide: light-dark(#c2c8cf, #2d3339);
+  --tinyTonnetz_theme_guide--blackKey: light-dark(#acb7c5, #22262b);
+  --tinyTonnetz_theme_guide_text: light-dark(#f1f7fd, #545c65);
+
   --tinyTonnetz_trace_duration: 1s;
   --tinyTonnetz_trace_timingFunction: cubic-bezier(0, 1.11, 1, 0.55);
 
@@ -48,6 +52,22 @@ tiny-tonnetz-cell {
   transition-property: transform, box-shadow, background-color, color, border, outline-width, outline-color;
   transition-duration: 100ms;
 
+  &.-blackKey {
+    justify-content: space-between;
+    background: var(--tinyTonnetz_theme_cell_background--blackKey);
+    color: var(--tinyTonnetz_theme_cell_text--blackKey);
+    font-size: 9px;
+  }
+
+  &.-guide {
+    background: var(--tinyTonnetz_theme_guide);
+    color: var(--tinyTonnetz_theme_guide_text);
+
+    &.-blackKey {
+      background: var(--tinyTonnetz_theme_guide--blackKey);
+    }
+  }
+
   &.-trace {
     transition-duration: var(--tinyTonnetz_trace_duration);
     transition-timing-function: var(--tinyTonnetz_trace_timingFunction);
@@ -60,12 +80,6 @@ tiny-tonnetz-cell {
   height: 34px;
   aspect-ratio: 1;
 
-  &.-blackKey {
-    justify-content: space-between;
-    background: var(--tinyTonnetz_theme_cell_background--blackKey);
-    color: var(--tinyTonnetz_theme_cell_text--blackKey);
-    font-size: 9px;
-  }
 
   & :first-child {
     align-self: flex-start;
@@ -136,6 +150,10 @@ tiny-tonnetz-cell {
     transition-property: stroke, stroke-width, stroke-dasharray;
     transition-duration: 100ms;
 
+    &.-guide {
+      stroke: var(--tinyTonnetz_theme_guide);
+    }
+
     &.-trace {
       transition-duration: var(--tinyTonnetz_trace_duration);
       transition-timing-function: var(--tinyTonnetz_trace_timingFunction);
@@ -186,6 +204,11 @@ tiny-tonnetz-cell {
 .cell_minorChord {
   fill: none;
 
+  &.-guide {
+    fill: var(--tinyTonnetz_theme_guide);
+    opacity: 0.5;
+  }
+
   &.-active {
     fill: url(#minor-grad);
   }
@@ -193,6 +216,12 @@ tiny-tonnetz-cell {
 
 .cell_majorChord {
   fill: none;
+
+  &.-guide {
+    fill: var(--tinyTonnetz_theme_guide);
+    opacity: 0.5;
+  }
+
   &.-active {
     fill: url(#major-grad);
   }

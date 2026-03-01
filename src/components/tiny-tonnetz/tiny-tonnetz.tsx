@@ -5,7 +5,7 @@ import {
   NoteNamingConventions,
   SEMI_TONE_COUNT,
   SemiToneCode, TonnetzCellState,
-  TonnetzCellStates
+  TonnetzCellStates, TonnetzGuide
 } from "../../utils/models";
 import { Components } from "../../components";
 import { LocalStorage } from "../../utils/decorators/local-storage.decorator";
@@ -269,6 +269,65 @@ export class TinyTonnetz {
   }
 
   private createCell(cellStates: any, semiToneCode: SemiToneCode, x: number, y: number, width: number, height: number) {
+    const guide: TonnetzGuide = {
+      10: {
+        note: true,
+        minorThird: false,
+        majorThird: true,
+        perfectFifth: true,
+        minorChord: false,
+        majorChord: true,
+      },
+      0: {
+        note: true,
+        minorThird: true,
+        majorThird: false,
+        perfectFifth: true,
+        minorChord: true,
+        majorChord: false,
+      },
+      2: {
+        note: true,
+        minorThird: true,
+        majorThird: false,
+        perfectFifth: true,
+        minorChord: true,
+        majorChord: false,
+      },
+      3: {
+        note: true,
+        minorThird: false,
+        majorThird: true,
+        perfectFifth: true,
+        minorChord: false,
+        majorChord: true,
+      },
+      5: {
+        note: true,
+        minorThird: false,
+        majorThird: true,
+        perfectFifth: true,
+        minorChord: false,
+        majorChord: true,
+      },
+      7: {
+        note: true,
+        minorThird: true,
+        majorThird: false,
+        perfectFifth: true,
+        minorChord: true,
+        majorChord: false,
+      },
+      9: {
+        note: true,
+        minorThird: true,
+        majorThird: false,
+        perfectFifth: false,
+        minorChord: false,
+        majorChord: false,
+      }
+    }; // TODO: remove
+
     return (
       <tiny-tonnetz-cell
         key={`${x}-${y}`}
@@ -279,6 +338,7 @@ export class TinyTonnetz {
         noteNamingConvention={this.noteNamingConvention}
         isTracing={this.isTracing}
         hasNoTransition={this.hasNoTransition}
+        guide={guide}
         style={{
           position: 'absolute',
           translate: `${x}px ${y}px`,

@@ -45,3 +45,16 @@ export interface TonnetzCellState {
   isMinorThirdIntervalActive: boolean;
   isMinorThirdIntervalPressed: boolean;
 }
+
+export type TonnetzCellsMarkedForGuide = Partial<Record<SemiToneCode, boolean>>
+
+export type TonnetzGuide = Partial<Record<SemiToneCode, TonnetzGuideCell>>
+
+export interface TonnetzGuideCell {
+  note: boolean,
+  minorThird: boolean,
+  majorThird: boolean,
+  perfectFifth: boolean,
+  minorChord: boolean,
+  majorChord: boolean,
+}

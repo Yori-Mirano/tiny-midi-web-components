@@ -5,8 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { ActiveNotes, NoteNamingConventions, SemiToneCode } from "./utils/models";
-export { ActiveNotes, NoteNamingConventions, SemiToneCode } from "./utils/models";
+import { ActiveNotes, NoteNamingConventions, SemiToneCode, TonnetzGuide } from "./utils/models";
+export { ActiveNotes, NoteNamingConventions, SemiToneCode, TonnetzGuide } from "./utils/models";
 export namespace Components {
     interface TinyTonnetz {
         "activeNotes": ActiveNotes;
@@ -24,6 +24,7 @@ export namespace Components {
     }
     interface TinyTonnetzCell {
         "cellStates": any;
+        "guide": TonnetzGuide;
         "hasNoTransition": boolean;
         "height": number;
         "isTracing": boolean;
@@ -67,6 +68,7 @@ declare namespace LocalJSX {
     }
     interface TinyTonnetzCell {
         "cellStates"?: any;
+        "guide"?: TonnetzGuide;
         "hasNoTransition"?: boolean;
         "height"?: number;
         "isTracing"?: boolean;

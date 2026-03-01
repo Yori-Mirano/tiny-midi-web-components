@@ -1,5 +1,5 @@
 import { Component, h, Host, Prop } from '@stencil/core';
-import { NoteNamingConventions, NoteState, SemiToneCode } from "../../utils/models";
+import { NoteNamingConventions, NoteState, SemiToneCode, TonnetzGuide } from "../../utils/models";
 import { isBlackKeyNote } from "../../utils/utils";
 import { getNoteNames, NOTE_NAMES } from "../../utils/note-names";
 
@@ -32,6 +32,7 @@ export class TinyTonnetzCell {
   @Prop() noteNamingConvention: NoteNamingConventions = NoteNamingConventions.ENGLISH;
   @Prop() isTracing: boolean = false;
   @Prop() hasNoTransition: boolean = false;
+  @Prop() guide: TonnetzGuide = {};
 
   render() {
     return (
@@ -51,12 +52,20 @@ export class TinyTonnetzCell {
 
           <polygon
             points={`0,${this.height} ${this.width},0 ${this.width},${this.height}`}
-            class={{ 'cell_majorChord': true, '-active': this.cellStates[this.semiToneCode]?.isMajorChordActive}}
+            class={{
+              'cell_majorChord': true,
+              '-active': this.cellStates[this.semiToneCode]?.isMajorChordActive,
+              '-guide': this.guide[this.semiToneCode]?.majorChord,
+            }}
           />
 
           <polygon
             points={`0,0 0,${this.height} ${this.width},0`}
-            class={{ 'cell_minorChord': true, '-active': this.cellStates[this.semiToneCode]?.isMinorChordActive}}
+            class={{
+              'cell_minorChord': true,
+              '-active': this.cellStates[this.semiToneCode]?.isMinorChordActive,
+              '-guide': this.guide[this.semiToneCode]?.minorChord,
+          }}
           />
 
           <line
@@ -66,6 +75,7 @@ export class TinyTonnetzCell {
               '-active': this.cellStates[this.semiToneCode]?.isMinorThirdIntervalActive,
               '-pressed': this.cellStates[this.semiToneCode]?.isMinorThirdIntervalPressed,
               '-trace': this.isTracing,
+              '-guide': this.guide[this.semiToneCode]?.minorThird,
               '-noTransition': this.hasNoTransition
           }}
           />
@@ -77,6 +87,7 @@ export class TinyTonnetzCell {
               '-active': this.cellStates[this.semiToneCode]?.isMajorThirdIntervalActive,
               '-pressed': this.cellStates[this.semiToneCode]?.isMajorThirdIntervalPressed,
               '-trace': this.isTracing,
+              '-guide': this.guide[this.semiToneCode]?.majorThird,
               '-noTransition': this.hasNoTransition
           }}/>
 
@@ -88,6 +99,7 @@ export class TinyTonnetzCell {
               '-pressed': this.cellStates[this.semiToneCode]?.isPerfectFifthIntervalPressed,
               '-chordActive': this.cellStates[this.semiToneCode]?.hasChordActive,
               '-trace': this.isTracing,
+              '-guide': this.guide[this.semiToneCode]?.perfectFifth,
               '-noTransition': this.hasNoTransition
           }}/>
         </svg>
@@ -106,6 +118,7 @@ export class TinyTonnetzCell {
             '-pressed': this.cellStates[this.semiToneCode]?.state === NoteState.PRESSED,
             '-completelyPressed': this.cellStates[this.semiToneCode]?.count > 1,
             '-trace': this.isTracing,
+            '-guide': this.guide[this.semiToneCode]?.note,
             '-noTransition': this.hasNoTransition
           }}
           style={{
