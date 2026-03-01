@@ -10,6 +10,7 @@ export { ActiveNotes, NoteNamingConventions, SemiToneCode } from "./utils/models
 export namespace Components {
     interface TinyTonnetz {
         "activeNotes": ActiveNotes;
+        "bassNote"?: SemiToneCode;
         "centralClusterMargin": number;
         "isDarkTheme": boolean;
         "isLightTheme": boolean;
@@ -53,6 +54,7 @@ declare global {
 declare namespace LocalJSX {
     interface TinyTonnetz {
         "activeNotes"?: ActiveNotes;
+        "bassNote"?: SemiToneCode;
         "centralClusterMargin"?: number;
         "isDarkTheme"?: boolean;
         "isLightTheme"?: boolean;
