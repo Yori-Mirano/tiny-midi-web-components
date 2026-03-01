@@ -28,6 +28,8 @@ export function getComputedTonnetzCellStates(activeNotes: ActiveNotes): TonnetzC
 
       isMinorThirdIntervalActive: isMinorThirdIntervalActive(activeNotes, semiToneCode),
       isMinorThirdIntervalPressed: isMinorThirdIntervalPressed(activeNotes, semiToneCode),
+
+      is7ofMinorMaj7Chord: is7ofMinorMaj7Chord(activeNotes, semiToneCode),
     }
   });
 
@@ -82,7 +84,7 @@ function isMinorThirdIntervalActive(activeNotes: ActiveNotes, semiToneCode: Semi
 
 function isMinorThirdIntervalPressed(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
   return isPressed(activeNotes[semiToneCode])
-    && activeNotes?.[(semiToneCode + NoteIntervals.MINOR_THIRD) % SEMI_TONE_COUNT]?.filter(note => note.state === NoteState.PRESSED)?.length
+    && activeNotes?.[(semiToneCode + NoteIntervals.MINOR_THIRD) % SEMI_TONE_COUNT]?.filter((note:NoteKey) => note.state === NoteState.PRESSED)?.length
 }
 
 function isMajorThirdIntervalActive(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
@@ -91,7 +93,7 @@ function isMajorThirdIntervalActive(activeNotes: ActiveNotes, semiToneCode: Semi
 
 function isMajorThirdIntervalPressed(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
   return isPressed(activeNotes[semiToneCode])
-    && activeNotes?.[(semiToneCode + NoteIntervals.MAJOR_THIRD) % SEMI_TONE_COUNT]?.filter(note => note.state === NoteState.PRESSED)?.length
+    && activeNotes?.[(semiToneCode + NoteIntervals.MAJOR_THIRD) % SEMI_TONE_COUNT]?.filter((note:NoteKey) => note.state === NoteState.PRESSED)?.length
 }
 
 function isPerfectFifthIntervalActive(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
@@ -100,5 +102,13 @@ function isPerfectFifthIntervalActive(activeNotes: ActiveNotes, semiToneCode: Se
 
 function isPerfectFifthIntervalPressed(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
   return isPressed(activeNotes[semiToneCode])
-    && activeNotes?.[(semiToneCode + NoteIntervals.PERFECT_FIFTH) % SEMI_TONE_COUNT]?.filter(note => note.state === NoteState.PRESSED)?.length
+    && activeNotes?.[(semiToneCode + NoteIntervals.PERFECT_FIFTH) % SEMI_TONE_COUNT]?.filter((note:NoteKey) => note.state === NoteState.PRESSED)?.length
+}
+
+function is7ofMinorMaj7Chord(activeNotes: ActiveNotes, semiToneCode: SemiToneCode) {
+  return isNoteActive(activeNotes[semiToneCode])
+    && activeNotes?.[(semiToneCode + NoteIntervals.MAJOR_THIRD) % SEMI_TONE_COUNT]?.length > 0
+    && activeNotes?.[(semiToneCode - NoteIntervals.MAJOR_THIRD + SEMI_TONE_COUNT) % SEMI_TONE_COUNT]?.length > 0
+    && activeNotes?.[(semiToneCode + 1) % SEMI_TONE_COUNT]?.length > 0
+    && !(activeNotes?.[(semiToneCode - NoteIntervals.MINOR_THIRD + SEMI_TONE_COUNT) % SEMI_TONE_COUNT]?.length > 0) // prevent some false positive
 }
