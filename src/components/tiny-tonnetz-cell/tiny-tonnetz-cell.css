@@ -149,20 +149,22 @@ tiny-tonnetz-cell {
       stroke-width: 4px;
     }
 
-    &.-active {
-      stroke-width: 12px;
-      stroke: var(--tinyTonnetz_theme_link--active);
-      transition-duration: 100ms;
+    &:not(.-is7ofMinorMaj7Chord) {
+      &.-active {
+        stroke-width: 12px;
+        stroke: var(--tinyTonnetz_theme_link--active);
+        transition-duration: 100ms;
 
-      &.-chordActive {
-        stroke-width: 2px;
-        /*stroke-dasharray: 16, 6;*/
+        &.-chordActive {
+          stroke-width: 2px;
+          /*stroke-dasharray: 16, 6;*/
+        }
       }
-    }
 
-    &.-pressed {
-      stroke-width: 14px;
-      stroke: var(--tinyTonnetz_theme_link--pressed);
+      &.-pressed {
+        stroke-width: 14px;
+        stroke: var(--tinyTonnetz_theme_link--pressed);
+      }
     }
   }
 }

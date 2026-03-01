@@ -59,6 +59,7 @@ export class TinyTonnetzCell {
             class={{ 'cell_minorChord': true, '-active': this.cellStates[this.semiToneCode]?.isMinorChordActive}}
           />
 
+          {/* Minor third */}
           <line
             x1={0} y1={this.height}
             x2={0} y2={0}
@@ -70,16 +71,19 @@ export class TinyTonnetzCell {
           }}
           />
 
+          {/* Major third */}
           <line
             x1={0} y1={this.height}
             x2={this.width} y2={this.height}
             class={{
               '-active': this.cellStates[this.semiToneCode]?.isMajorThirdIntervalActive,
               '-pressed': this.cellStates[this.semiToneCode]?.isMajorThirdIntervalPressed,
+              '-is7ofMinorMaj7Chord': this.cellStates[this.semiToneCode]?.is7ofMinorMaj7Chord,
               '-trace': this.isTracing,
               '-noTransition': this.hasNoTransition
           }}/>
 
+          {/* Perfect fifth */}
           <line
             x1={0} y1={this.height}
             x2={this.width} y2={0}
