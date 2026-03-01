@@ -149,7 +149,7 @@ tiny-tonnetz-cell {
       stroke-width: 4px;
     }
 
-    &:not(.-is7ofMinorMaj7Chord) {
+    &:not(.-is7ofMinorMaj7Chord):not(.-is9ofMAjorFlat9Chord) {
       &.-active {
         stroke-width: 12px;
         stroke: var(--tinyTonnetz_theme_link--active);

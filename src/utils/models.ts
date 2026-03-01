@@ -45,4 +45,5 @@ export interface TonnetzCellState {
   isMinorThirdIntervalActive: boolean;
   isMinorThirdIntervalPressed: boolean;
   is7ofMinorMaj7Chord: boolean;
+  is9ofMAjorFlat9Chord: boolean;
 }

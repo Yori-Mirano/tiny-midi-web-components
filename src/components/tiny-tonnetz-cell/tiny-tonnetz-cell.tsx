@@ -66,6 +66,7 @@ export class TinyTonnetzCell {
             class={{
               '-active': this.cellStates[this.semiToneCode]?.isMinorThirdIntervalActive,
               '-pressed': this.cellStates[this.semiToneCode]?.isMinorThirdIntervalPressed,
+              '-is9ofMAjorFlat9Chord': this.cellStates[this.semiToneCode]?.is9ofMAjorFlat9Chord,
               '-trace': this.isTracing,
               '-noTransition': this.hasNoTransition
           }}
