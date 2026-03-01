@@ -223,9 +223,9 @@ export class TinyTonnetz {
         if (col === -1 && row === -2) {
           legend = (
             <div class="tinyTonnetz_legend" style={{ translate:`${x}px ${y}px` }}>
-              <div class="tinyTonnetz_legend_minorThird">3 🡆</div>
-              <div class="tinyTonnetz_legend_majorThird">4 🡆</div>
-              <div class="tinyTonnetz_legend_perfectFifth">🡄 5</div>
+              <div class="tinyTonnetz_legend_minorThird">3 ►</div>
+              <div class="tinyTonnetz_legend_majorThird">4 semitones ►</div>
+              <div class="tinyTonnetz_legend_perfectFifth">◄ 5</div>
             </div>
           );
         }
