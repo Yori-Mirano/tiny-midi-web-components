@@ -102,6 +102,5 @@ export class WebMidiTonnetzController {
 
   updateBassNote() {
     this.tonnetz.bassNote = (this.pressedKeyNotes[0] % SEMI_TONE_COUNT) as SemiToneCode;
-    console.log(this.tonnetz.bassNote)
   }
 }
